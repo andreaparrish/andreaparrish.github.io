@@ -4,7 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Balance Planner | IT371</title>
+    <!-- Swap no-js -> js as early as possible so CSS applies correctly -->
+    <script>
+      document.documentElement.className =
+        document.documentElement.className.replace("no-js", "js");
+    </script>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title>Balance Planner</title>
     <meta
       name="description"
       content="A simple planner site with tabs for Home, School, Work, and Journal to help busy adults stay organized."
@@ -17,7 +25,7 @@
     <meta name="bingbot" content="noindex, nofollow" />
 
     <!-- Social (OK to leave while noindex) -->
-    <meta property="og:title" content="Balance Planner | IT371" />
+    <meta property="og:title" content="Balance Planner" />
     <meta
       property="og:description"
       content="A simple planner site for school, work, and home."
@@ -29,35 +37,66 @@
       content="https://andreaparrish.github.io/icon.png"
     />
 
-    <!-- Icons (relative paths) -->
+    <!-- Icons -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
 
     <link rel="manifest" href="site.webmanifest" />
-    <meta name="theme-color" content="#fafafa" />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
 
+    <!-- Shows only when JS is off -->
+    <noscript>
+      <p class="no-js-msg">
+        Balance Planner needs JavaScript for tasks and saving. You can still
+        read the page, but interactive features are disabled.
+      </p>
+    </noscript>
+
     <header>
       <h1>Balance Planner</h1>
-      <!-- nav goes here -->
+      <!-- Primary nav will go here -->
+      <button id="themeToggle" class="btn" type="button">Toggle theme</button>
     </header>
 
     <main id="main">
       <p>Hello IT371! This is HTML5 Boilerplate.</p>
+
+      <!-- Everything in this block requires JavaScript -->
+      <section class="requires-js container">
+        <h2 class="visually-hidden">Tasks</h2>
+
+        <!-- Task entry form -->
+        <form id="taskForm">
+          <label for="taskText" class="visually-hidden">Task</label>
+          <input id="taskText" placeholder="New task…" required />
+
+          <label for="taskCat" class="visually-hidden">Category</label>
+          <select id="taskCat">
+            <option>Home</option>
+            <option>School</option>
+            <option>Work</option>
+          </select>
+
+          <button class="btn" type="submit">Add</button>
+        </form>
+
+        <!-- Live task list (announces updates to assistive tech) -->
+        <ul
+          id="taskList"
+          aria-live="polite"
+          aria-relevant="additions removals text"
+        ></ul>
+      </section>
     </main>
 
     <footer>
       <small>&copy; 2025 Andrea Parrish</small>
     </footer>
 
-    <script>
-      // If JS is enabled, swap the no-js class for js
-      document.documentElement.className =
-        document.documentElement.className.replace("no-js", "js");
-    </script>
+    <!-- App code loads after HTML is parsed -->
     <script src="js/app.js" defer></script>
   </body>
 </html>
