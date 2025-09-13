@@ -1,12 +1,11 @@
 {
-  "short_name": "",
-  "name": "",
-  "icons": [{
-    "src": "icon.png",
-    "type": "image/png",
-    "sizes": "192x192"
-  }],
-  "start_url": "/?utm_source=homescreen",
+  "name": "Balance Planner",
+  "short_name": "Planner",
+  "description": "Simple planner with tabs for Home, School, Work, and Journal.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "minimal-ui",
   "background_color": "#fafafa",
-  "theme_color": "#fafafa"
+  "theme_color": "#fafafa",
+  "icons": [{ "src": "icon.png", "type": "image/png", "sizes": "192x192" }]
 }
