@@ -12,36 +12,21 @@
 
     <link rel="stylesheet" href="css/style.css" />
 
-    <title>Balance Planner</title>
+    <title>Balance Planner - Dashboard</title>
     <meta
       name="description"
       content="A simple planner site with tabs for Home, School, Work, and Journal to help busy adults stay organized."
     />
-    <link rel="canonical" href="https://andreaparrish.github.io/" />
 
     <!-- Keep private -->
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="bingbot" content="noindex, nofollow" />
 
-    <!-- Social (OK to leave while noindex) -->
-    <meta property="og:title" content="Balance Planner" />
-    <meta
-      property="og:description"
-      content="A simple planner site for school, work, and home."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://andreaparrish.github.io/" />
-    <meta
-      property="og:image"
-      content="https://andreaparrish.github.io/icon.png"
-    />
-
     <!-- Icons -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
-
     <link rel="manifest" href="site.webmanifest" />
   </head>
   <body>
@@ -57,33 +42,78 @@
 
     <header>
       <h1>Balance Planner</h1>
-      <!-- Primary nav will go here -->
+
+      <!-- Primary Navigation -->
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li>
+            <a href="index.html" class="nav-link active" aria-current="page"
+              >Dashboard</a
+            >
+          </li>
+          <li><a href="personal.html" class="nav-link">Personal</a></li>
+          <li><a href="school.html" class="nav-link">School</a></li>
+          <li><a href="work.html" class="nav-link">Work</a></li>
+          <li><a href="journal.html" class="nav-link">Journal</a></li>
+        </ul>
+      </nav>
+
       <button id="themeToggle" class="btn" type="button">Toggle theme</button>
     </header>
 
     <main id="main">
-      <p>Hello IT371! This is HTML5 Boilerplate.</p>
+      <section class="dashboard-intro">
+        <p>
+          Welcome to Balance Planner — your simple hub for keeping life on
+          track. Whether you're juggling work, school, or family, this planner
+          helps you focus on what matters most today.
+        </p>
+      </section>
 
-      <!-- Everything in this block requires JavaScript -->
-      <section class="requires-js container">
-        <h2 class="visually-hidden">Tasks</h2>
+      <!-- Dashboard Overview Cards -->
+      <section class="dashboard-overview">
+        <h2>Today's Overview</h2>
+        <div class="overview-grid">
+          <div class="overview-card">
+            <h3>Personal</h3>
+            <p class="task-count" id="personal-count">0 tasks</p>
+          </div>
+          <div class="overview-card">
+            <h3>School</h3>
+            <p class="task-count" id="school-count">0 tasks</p>
+          </div>
+          <div class="overview-card">
+            <h3>Work</h3>
+            <p class="task-count" id="work-count">0 tasks</p>
+          </div>
+          <div class="overview-card">
+            <h3>Journal</h3>
+            <p class="journal-count" id="journal-count">0 entries</p>
+          </div>
+        </div>
+      </section>
 
-        <!-- Task entry form -->
+      <!-- Quick Add Task -->
+      <section class="quick-add">
+        <h2>Quick Add Task</h2>
         <form id="taskForm">
           <label for="taskText" class="visually-hidden">Task</label>
           <input id="taskText" placeholder="New task…" required />
 
           <label for="taskCat" class="visually-hidden">Category</label>
           <select id="taskCat">
-            <option>Home</option>
-            <option>School</option>
-            <option>Work</option>
+            <option value="Personal">Personal</option>
+            <option value="School">School</option>
+            <option value="Work">Work</option>
           </select>
 
           <button class="btn" type="submit">Add</button>
         </form>
+      </section>
 
-        <!-- Live task list (announces updates to assistive tech) -->
+      <!-- Recent Tasks -->
+      <section class="recent-tasks">
+        <h2>Recent Tasks</h2>
         <ul
           id="taskList"
           aria-live="polite"

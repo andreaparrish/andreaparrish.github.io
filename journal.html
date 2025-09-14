@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script>
+      document.documentElement.className =
+        document.documentElement.className.replace("no-js", "js");
+    </script>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Balance Planner - Journal</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
+
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <noscript>
+      <p class="no-js-msg">
+        Balance Planner needs JavaScript for tasks and saving.
+      </p>
+    </noscript>
+
+    <header>
+      <h1>Balance Planner</h1>
+
+      <!-- Primary Navigation -->
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="nav-link">Dashboard</a></li>
+          <li><a href="personal.html" class="nav-link">Personal</a></li>
+          <li><a href="school.html" class="nav-link">School</a></li>
+          <li><a href="work.html" class="nav-link">Work</a></li>
+          <li>
+            <a href="journal.html" class="nav-link active" aria-current="page"
+              >Journal</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <button id="themeToggle" class="btn" type="button">Toggle theme</button>
+    </header>
+
+    <main id="main">
+      <section class="page-header">
+        <h2>Daily Journal</h2>
+        <p>Quick brain dump and daily reflections.</p>
+      </section>
+
+      <section class="journal-section">
+        <form id="journalForm">
+          <label for="journalDate">Date</label>
+          <input id="journalDate" type="date" required />
+
+          <label for="journalText">Entry</label>
+          <textarea
+            id="journalText"
+            placeholder="What's on your mind today?"
+            rows="4"
+            required
+          ></textarea>
+
+          <button class="btn" type="submit">Save Entry</button>
+        </form>
+
+        <div id="journalEntries" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer>
+      <small>&copy; 2025 Andrea Parrish</small>
+    </footer>
+
+    <script src="js/app.js" defer></script>
+  </body>
+</html>
+```

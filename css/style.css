@@ -1,23 +1,46 @@
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+/* ==========================================================================
+   BALANCE PLANNER - MAIN STYLESHEET
+   ========================================================================== */
 /*
- * Note to self: these defaults come from HTML5 Boilerplate.
- * They smooth out browser quirks so I start from a stable base.
+ * A comprehensive stylesheet for the Balance Planner web application.
+ * This file contains all styles organized by functionality and scope.
+ * 
+ * Table of Contents:
+ * 1. CSS Reset & Base Styles
+ * 2. Design System (Variables & Tokens)
+ * 3. Layout & Structure
+ * 4. Navigation Components
+ * 5. Dashboard Components
+ * 6. Form Components
+ * 7. Utility Classes
+ * 8. Responsive Design
+ * 9. Print Styles
+ * 10. Accessibility Features
  */
 
 /* ==========================================================================
-   Base styles: my default text sizing and rhythm
+   1. CSS RESET & BASE STYLES
    ========================================================================== */
-
-html {
-  color: #222; /* default text color before I override with variables */
-  font-size: 1em; /* start at 16px (browser default) */
-  line-height: 1.4; /* comfy reading line height */
-}
-
 /*
- * Clean <hr> so it looks simple and not chunky.
+ * Based on HTML5 Boilerplate with custom modifications.
+ * Provides a consistent foundation across all browsers.
  */
 
+/* Base HTML element styling */
+html {
+  color: #222; /* Default text color before CSS variables override */
+  font-size: 1em; /* 16px base font size */
+  line-height: 1.4; /* Comfortable reading line height */
+}
+
+/* Universal box-sizing for predictable layouts */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Clean horizontal rule styling */
 hr {
   display: block;
   height: 1px;
@@ -27,10 +50,7 @@ hr {
   padding: 0;
 }
 
-/*
- * Align media elements so there’s no tiny gap below images/videos/iframes.
- */
-
+/* Media element alignment to prevent gaps */
 audio,
 canvas,
 iframe,
@@ -40,71 +60,55 @@ video {
   vertical-align: middle;
 }
 
-/*
- * Reset fieldset so forms don’t get weird default borders.
- */
-
+/* Form element resets */
 fieldset {
   border: 0;
   margin: 0;
   padding: 0;
 }
 
+textarea {
+  resize: vertical; /* Only allow vertical resizing to prevent layout breaks */
+}
+
+/* ==========================================================================
+   2. DESIGN SYSTEM - CSS VARIABLES & TOKENS
+   ========================================================================== */
 /*
- * Only allow textareas to resize vertically so layout doesn’t break.
+ * Centralized design tokens for consistent styling across the application.
+ * These variables make it easy to maintain brand consistency and implement
+ * theme changes.
  */
 
-textarea {
-  resize: vertical;
-}
-
-/* ==========================================================================
-   no-js / js stuff
-   ========================================================================== */
-
-/* Hide interactive UI when JS is off */
-.no-js .requires-js {
-  display: none;
-}
-
-/* Optional: style the <noscript> message */
-.no-js-msg {
-  background: #fff3cd;
-  color: #664d03;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-}
-
-/* ==========================================================================
-   Author's custom styles (my stuff starts here)
-   ========================================================================== */
-
-/* 1) Design tokens: variables I’ll reuse everywhere */
 :root {
-  /* colors */
-  --bg: #ffffff; /* page background */
-  --text: #111111; /* main text */
-  --muted-text: #555555; /* secondary text */
-  --surface: #f7f7f9; /* card/background panels */
-  --border: #e5e7eb; /* subtle borders */
-  --accent: #4f46e5; /* links, buttons, highlights */
-  --accent-contrast: #ffffff; /* text on accent */
-  color-scheme: light;
+  /* Color Palette */
+  --bg: #ffffff; /* Primary background color */
+  --text: #111111; /* Primary text color */
+  --muted-text: #555555; /* Secondary/subdued text */
+  --surface: #f7f7f9; /* Card and panel backgrounds */
+  --border: #e5e7eb; /* Subtle borders and dividers */
+  --accent: #4f46e5; /* Brand accent color for links, buttons */
+  --accent-contrast: #ffffff; /* Text color on accent backgrounds */
+  color-scheme: light; /* Browser UI color scheme hint */
 
-  /* spacing scale (use these instead of random numbers) */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
+  /* Spacing Scale - Use these instead of arbitrary values */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
 
-  /* rounded corners and a soft shadow */
-  --radius: 12px;
+  /* Visual Effects */
+  --radius: 12px; /* Border radius for cards, buttons, etc. */
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Optional dark theme: flip variable values by adding class to <html> */
+/* Dark Theme Override */
+/*
+ * To activate dark theme, add 'theme-dark-a' class to the <html> element.
+ * This provides an alternative color scheme for users who prefer dark interfaces.
+ */
 .theme-dark-a {
   --bg: #0b0b0f;
   --text: #e7e7ea;
@@ -116,7 +120,15 @@ textarea {
   color-scheme: dark;
 }
 
-/* Base overrides that use my variables (wins over earlier defaults) */
+/* ==========================================================================
+   3. LAYOUT & STRUCTURE
+   ========================================================================== */
+/*
+ * Core layout components and structural elements.
+ * These provide the foundation for page layouts and content organization.
+ */
+
+/* Base body styling with theme support */
 html,
 body {
   background: var(--bg);
@@ -124,6 +136,7 @@ body {
   transition: background-color 0.2s linear, color 0.2s linear;
 }
 
+/* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   html,
   body {
@@ -131,42 +144,13 @@ body {
   }
 }
 
-/* Make sizing predictable across elements */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-/* Links use accent color. Hover gets an underline for clarity. */
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-/* Selection should match my accent, with readable text color. */
-::selection {
-  background: var(--accent);
-  color: var(--accent-contrast);
-}
-::-moz-selection {
-  background: var(--accent);
-  color: var(--accent-contrast);
-}
-
-/* hr uses my border variable so it matches the rest of the UI */
-hr {
-  border-top: 1px solid var(--border);
-}
-
-/* Simple layout helpers I’ll actually use */
+/* Main container for content width and centering */
 .container {
-  width: min(100% - 2rem, 72rem);
-  margin-inline: auto;
+  width: min(100% - 2rem, 72rem); /* Responsive width with max constraint */
+  margin-inline: auto; /* Center horizontally */
 }
+
+/* Card component for content sections */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -175,7 +159,135 @@ hr {
   padding: var(--space-4);
 }
 
-/* Buttons share one look so the site feels consistent */
+/* Two-column grid layout for dashboard cards */
+@media (min-width: 48rem) {
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   4. NAVIGATION COMPONENTS
+   ========================================================================== */
+/*
+ * Navigation styling for the main site navigation.
+ * Includes responsive behavior and accessibility features.
+ */
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-4);
+}
+
+.main-nav a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+  background: var(--surface);
+  text-decoration: none;
+}
+
+.main-nav a.active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Mobile navigation - stack vertically on small screens */
+@media (max-width: 47.99rem) {
+  .main-nav ul {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
+
+/* ==========================================================================
+   5. DASHBOARD COMPONENTS
+   ========================================================================== */
+/*
+ * Dashboard-specific styling for the main application interface.
+ * Includes overview cards, statistics, and dashboard layout.
+ */
+
+.dashboard-intro {
+  margin-bottom: var(--space-8);
+}
+
+.dashboard-overview h2 {
+  margin-bottom: var(--space-4);
+}
+
+/* Overview cards grid layout */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.overview-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.overview-card h3 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--accent);
+}
+
+.task-count,
+.journal-count {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   6. FORM COMPONENTS
+   ========================================================================== */
+/*
+ * Form styling for user input elements.
+ * Includes journal forms, task forms, and other input components.
+ */
+
+#journalForm {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+#journalForm label {
+  font-weight: bold;
+  color: var(--accent);
+}
+
+#journalText {
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* ==========================================================================
+   7. BUTTONS & INTERACTIVE ELEMENTS
+   ========================================================================== */
+/*
+ * Button styling and interactive element states.
+ * Ensures consistent interaction patterns across the application.
+ */
+
+/* Primary button styling */
 .btn {
   display: inline-block;
   background: var(--accent);
@@ -186,60 +298,110 @@ hr {
   cursor: pointer;
 }
 
-/* better focus styling */
+/* Enhanced focus styling for accessibility */
 .btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
 .btn:focus {
-  outline: none;
-} /* let :focus-visible handle it */
-
-/* Skip link so keyboard users can jump to main content */
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: auto;
-  background: var(--accent);
-  color: var(--accent-contrast);
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
-}
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  z-index: 1000;
-}
-
-/* Quick 2-column grid I can reuse for dashboard cards */
-@media (min-width: 48rem) {
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
-  }
+  outline: none; /* Let :focus-visible handle focus styling */
 }
 
 /* ==========================================================================
-   Helper classes (tiny utilities for special cases)
+   8. TYPOGRAPHY & TEXT STYLING
    ========================================================================== */
-
 /*
- * Completely hide things, including from screen readers.
- * Use sparingly. If content should be read by screen readers, use .visually-hidden instead.
+ * Text styling, links, and typography rules.
+ * Ensures consistent text appearance and interaction states.
  */
 
+/* Link styling with hover states */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Text selection styling */
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+::-moz-selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Update hr to use design system colors */
+hr {
+  border-top: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   9. PAGE-SPECIFIC STYLES
+   ========================================================================== */
+/*
+ * Styles specific to individual pages or sections.
+ * Organized by page/component for easy maintenance.
+ */
+
+/* Page header styling */
+.page-header {
+  margin-bottom: var(--space-6);
+}
+
+.page-header h2 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--accent);
+}
+
+/* Task and journal sections */
+.task-section,
+.journal-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+/* Journal entry styling */
+.journal-entry {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.journal-entry h4 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--accent);
+  font-size: 0.9em;
+}
+
+.journal-entry p {
+  margin: 0;
+  white-space: pre-wrap; /* Preserve line breaks in journal entries */
+}
+
+/* ==========================================================================
+   10. UTILITY CLASSES
+   ========================================================================== */
+/*
+ * Small, reusable utility classes for common styling needs.
+ * Use these for quick styling adjustments without creating new components.
+ */
+
+/* Visibility utilities */
 .hidden,
 [hidden] {
   display: none !important;
 }
-
-/*
- * Hide visually but keep available for screen readers.
- * Good for extra labels or explanations.
- *
- * 1) Note: long text can wrap weirdly if the container is too narrow.
- */
 
 .visually-hidden {
   border: 0;
@@ -249,14 +411,9 @@ hr {
   overflow: hidden;
   padding: 0;
   position: absolute;
-  white-space: nowrap; /* 1 */
+  white-space: nowrap;
   width: 1px;
 }
-
-/*
- * Same as above but allow it to become visible when focused.
- * Useful for “Skip to content” links.
- */
 
 .visually-hidden.focusable:active,
 .visually-hidden.focusable:focus {
@@ -269,20 +426,11 @@ hr {
   width: auto;
 }
 
-/*
- * Keep space in the layout but hide the element visually.
- * Handy for temporarily hiding something without shifting the layout.
- */
-
 .invisible {
   visibility: hidden;
 }
 
-/*
- * Clearfix: only needed if I use floats (I probably won’t).
- * I can delete this later if I never use float-based layouts.
- */
-
+/* Layout utilities */
 .clearfix::before,
 .clearfix::after {
   content: "";
@@ -294,57 +442,108 @@ hr {
 }
 
 /* ==========================================================================
-   Example media queries (placeholders I’ll fill in as I design)
+   11. ACCESSIBILITY FEATURES
    ========================================================================== */
+/*
+ * Accessibility-focused styling and features.
+ * Ensures the application is usable by all users, including those using
+ * assistive technologies.
+ */
 
-@media only screen and (min-width: 35em) {
-  /* Put tablet+ adjustments here when I need them */
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
 }
 
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+}
+
+/* JavaScript dependency handling */
+.no-js .requires-js {
+  display: none;
+}
+
+.no-js-msg {
+  background: #fff3cd;
+  color: #664d03;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+/* ==========================================================================
+   12. RESPONSIVE DESIGN
+   ========================================================================== */
+/*
+ * Media queries for responsive behavior across different screen sizes.
+ * Organized from smallest to largest breakpoints.
+ */
+
+/* Tablet and larger screens */
+@media only screen and (min-width: 35em) {
+  /* Add tablet-specific adjustments here as needed */
+}
+
+/* High-DPI display optimizations */
 @media print,
   (-webkit-min-device-pixel-ratio: 1.25),
   (min-resolution: 1.25dppx),
   (min-resolution: 120dpi) {
-  /* High-DPI tweaks if I notice any blurriness on retina displays */
+  /* High-DPI display tweaks for crisp rendering */
 }
 
 /* ==========================================================================
-   Print styles (make printed pages readable and ink-friendly)
+   13. PRINT STYLES
    ========================================================================== */
+/*
+ * Optimized styling for printed pages.
+ * Ensures content is readable and ink-friendly when printed.
+ */
 
 @media print {
+  /* Reset all colors and effects for print */
   *,
   *::before,
   *::after {
-    background: #fff !important; /* white background prints faster/cleaner */
-    color: #000 !important; /* black text for contrast */
+    background: #fff !important;
+    color: #000 !important;
     box-shadow: none !important;
     text-shadow: none !important;
   }
 
+  /* Make links visible on paper */
   a,
   a:visited {
-    text-decoration: underline; /* underline links on paper */
+    text-decoration: underline;
   }
 
+  /* Show URLs after links */
   a[href]::after {
-    content: " (" attr(href) ")"; /* show the URL after the link */
+    content: " (" attr(href) ")";
   }
 
+  /* Expand abbreviations */
   abbr[title]::after {
-    content: " (" attr(title) ")"; /* expand abbreviations */
+    content: " (" attr(title) ")";
   }
 
-  /*
-   * Don’t print “#fragment” or javascript: links after anchors.
-   */
+  /* Don't print fragment or javascript links */
   a[href^="#"]::after,
   a[href^="javascript:"]::after {
     content: "";
   }
 
+  /* Code and quote formatting */
   pre {
-    white-space: pre-wrap !important; /* wrap long code blocks on paper */
+    white-space: pre-wrap !important;
   }
 
   pre,
@@ -353,20 +552,21 @@ hr {
     page-break-inside: avoid;
   }
 
+  /* Prevent awkward page breaks */
   tr,
   img {
-    page-break-inside: avoid; /* keep rows/images together */
+    page-break-inside: avoid;
   }
 
   p,
   h2,
   h3 {
     orphans: 3;
-    widows: 3; /* avoid lonely lines at page breaks */
+    widows: 3;
   }
 
   h2,
   h3 {
-    page-break-after: avoid; /* keep headings with their content */
+    page-break-after: avoid;
   }
 }
