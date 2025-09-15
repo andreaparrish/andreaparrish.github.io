@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <script>
-      document.documentElement.className =
-        document.documentElement.className.replace("no-js", "js");
+      document.documentElement.className = document.documentElement.className.replace("no-js", "js");
     </script>
 
     <link rel="stylesheet" href="css/style.css" />
@@ -22,12 +21,10 @@
     <a href="#main" class="skip-link">Skip to content</a>
 
     <noscript>
-      <p class="no-js-msg">
-        Balance Planner needs JavaScript for tasks and saving.
-      </p>
+      <p class="no-js-msg">Balance Planner needs JavaScript for tasks and saving.</p>
     </noscript>
 
-    <header>
+    <header class="container">
       <h1>Balance Planner</h1>
 
       <!-- Primary Navigation -->
@@ -37,18 +34,19 @@
           <li><a href="personal.html" class="nav-link">Personal</a></li>
           <li><a href="school.html" class="nav-link">School</a></li>
           <li>
-            <a href="work.html" class="nav-link active" aria-current="page"
-              >Work</a
-            >
+            <a href="work.html" class="nav-link active" aria-current="page">Work</a>
           </li>
           <li><a href="journal.html" class="nav-link">Journal</a></li>
+          <li>
+            <button id="themeToggle" class="btn theme-toggle" type="button" aria-label="Toggle theme">
+              Theme Toggle
+            </button>
+          </li>
         </ul>
       </nav>
-
-      <button id="themeToggle" class="btn" type="button">Toggle theme</button>
     </header>
 
-    <main id="main">
+    <main id="main" class="container">
       <section class="page-header">
         <h2>Work Tasks</h2>
         <p>Organize your professional responsibilities and projects.</p>
@@ -64,15 +62,11 @@
           <button class="btn" type="submit">Add</button>
         </form>
 
-        <ul
-          id="taskList"
-          aria-live="polite"
-          aria-relevant="additions removals text"
-        ></ul>
+        <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
       </section>
     </main>
 
-    <footer>
+    <footer class="container">
       <small>&copy; 2025 Andrea Parrish</small>
     </footer>
 

@@ -81,6 +81,10 @@ textarea {
  */
 
 :root {
+  /* Font */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji", sans-serif;
+
   /* Color Palette */
   --bg: #ffffff; /* Primary background color */
   --text: #111111; /* Primary text color */
@@ -131,6 +135,7 @@ textarea {
 /* Base body styling with theme support */
 html,
 body {
+  font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.2s linear, color 0.2s linear;
@@ -182,6 +187,8 @@ body {
   margin: 0;
   padding: 0;
   gap: var(--space-4);
+  align-items: center;
+  font-size: 1rem; /* This will apply to all children consistently */
 }
 
 .main-nav a {
@@ -190,17 +197,48 @@ body {
   border-radius: var(--radius);
   text-decoration: none;
   transition: background-color 0.2s ease;
+  font-size: 1rem;
+  /* Add button-like styling */
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
 }
 
 .main-nav a:hover,
 .main-nav a:focus {
   background: var(--surface);
-  text-decoration: none;
+  border-color: var(--border);
 }
 
 .main-nav a.active {
   background: var(--accent);
   color: var(--accent-contrast);
+}
+
+/* Theme toggle button styling */
+.theme-toggle {
+  padding: var(--space-2);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: inherit; /* This will inherit from .main-nav ul */
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text);
 }
 
 /* Mobile navigation - stack vertically on small screens */
@@ -218,10 +256,6 @@ body {
  * Dashboard-specific styling for the main application interface.
  * Includes overview cards, statistics, and dashboard layout.
  */
-
-.dashboard-intro {
-  margin-bottom: var(--space-8);
-}
 
 .dashboard-overview h2 {
   margin-bottom: var(--space-4);
@@ -352,7 +386,8 @@ hr {
 
 /* Page header styling */
 .page-header {
-  margin-bottom: var(--space-6);
+  margin-top: var(--space-4); /* Add space above the page header */
+  margin-bottom: var(--space-4);
 }
 
 .page-header h2 {
@@ -493,10 +528,7 @@ hr {
 }
 
 /* High-DPI display optimizations */
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
+@media print, (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
   /* High-DPI display tweaks for crisp rendering */
 }
 
