@@ -1,18 +1,12 @@
 // ---------- tiny storage helper ----------
 const store = {
   get(key, fallback) {
-    try {
-      return JSON.parse(localStorage.getItem(key)) ?? fallback;
-    } catch {
-      return fallback;
-    }
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+    catch { return fallback; }
   },
   set(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {
-      /* ignore quota errors for now */
-    }
+    try { localStorage.setItem(key, JSON.stringify(value)); }
+    catch { /* ignore quota errors for now */ }
   },
 };
 
@@ -45,8 +39,12 @@ const journalCountEl = document.getElementById("journal-count");
 
 // ---------- utils ----------
 const makeId = () =>
-  crypto?.randomUUID?.() ||
+  (crypto?.randomUUID?.()) ||
   "t-" + Math.random().toString(36).slice(2) + Date.now();
+
+// simple escape to keep user-entered text safe in HTML
+const escapeHTML = (s = "") =>
+  s.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
 
 // Ensure there is a theme-color meta, return it
 function ensureThemeMeta() {
@@ -72,57 +70,54 @@ updateThemeColor();
 // ---------- dashboard updates ----------
 function updateDashboardCounts() {
   if (personalCountEl) {
-    const personalTasks = tasks.filter(t => t.category === "Personal" && !t.done).length;
-    personalCountEl.textContent = `${personalTasks} ${personalTasks === 1 ? 'task' : 'tasks'}`;
+    const n = tasks.filter(t => t.category === "Personal" && !t.done).length;
+    personalCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
   }
   if (schoolCountEl) {
-    const schoolTasks = tasks.filter(t => t.category === "School" && !t.done).length;
-    schoolCountEl.textContent = `${schoolTasks} ${schoolTasks === 1 ? 'task' : 'tasks'}`;
+    const n = tasks.filter(t => t.category === "School" && !t.done).length;
+    schoolCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
   }
   if (workCountEl) {
-    const workTasks = tasks.filter(t => t.category === "Work" && !t.done).length;
-    workCountEl.textContent = `${workTasks} ${workTasks === 1 ? 'task' : 'tasks'}`;
+    const n = tasks.filter(t => t.category === "Work" && !t.done).length;
+    workCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
   }
   if (journalCountEl) {
-    const today = new Date().toDateString();
-    const todayEntries = journalEntries.filter(e => new Date(e.date).toDateString() === today).length;
-    journalCountEl.textContent = `${journalEntries.length} ${journalEntries.length === 1 ? 'entry' : 'entries'}`;
+    const n = journalEntries.length;
+    journalCountEl.textContent = `${n} ${n === 1 ? "entry" : "entries"}`;
   }
 }
 
 // ---------- task rendering ----------
 function renderTasks(filterCategory = null) {
   if (!listEl) return;
-  
-  const filteredTasks = filterCategory ? 
-    tasks.filter(t => t.category === filterCategory) : 
-    tasks.slice(-5); // Show last 5 on dashboard
-  
-  listEl.innerHTML = filteredTasks
-    .map((t) => {
-      const cid = `task-${t.id}`;
-      return `
-      <li data-id="${t.id}" class="task-item ${t.done ? 'completed' : ''}">
+
+  const filtered = filterCategory
+    ? tasks.filter(t => t.category === filterCategory)
+    : tasks.slice(-5); // show last 5 on dashboard
+
+  listEl.innerHTML = filtered.map(t => {
+    const cid = `task-${t.id}`;
+    return `
+      <li data-id="${t.id}" class="task-item ${t.done ? "completed" : ""}">
         <input id="${cid}" type="checkbox" ${t.done ? "checked" : ""} class="t-done">
-        <label for="${cid}"><strong>[${t.category}]</strong> ${t.text}</label>
-        <button class="t-remove" type="button" aria-label="Remove task: ${t.text}">×</button>
+        <label for="${cid}"><strong>[${escapeHTML(t.category)}]</strong> ${escapeHTML(t.text)}</label>
+        <button class="t-remove" type="button" aria-label="Remove task: ${escapeHTML(t.text)}">×</button>
       </li>
     `;
-    })
-    .join("");
+  }).join("");
 }
 
 // ---------- journal rendering ----------
 function renderJournal() {
   const entriesEl = document.getElementById("journalEntries");
   if (!entriesEl) return;
-  
+
   entriesEl.innerHTML = journalEntries
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(entry => `
       <div class="journal-entry">
         <h4>${new Date(entry.date).toLocaleDateString()}</h4>
-        <p>${entry.text}</p>
+        <p>${escapeHTML(entry.text)}</p>
       </div>
     `)
     .join("");
@@ -130,24 +125,22 @@ function renderJournal() {
 
 // ---------- render everything ----------
 function render() {
-  // Determine current page and filter
+  // pick category by page
   const path = window.location.pathname;
   let filterCategory = null;
-  
-  if (path.includes('personal.html')) filterCategory = 'Personal';
-  else if (path.includes('school.html')) filterCategory = 'School';
-  else if (path.includes('work.html')) filterCategory = 'Work';
-  
+  if (path.includes("personal.html")) filterCategory = "Personal";
+  else if (path.includes("school.html")) filterCategory = "School";
+  else if (path.includes("work.html")) filterCategory = "Work";
+
   renderTasks(filterCategory);
   renderJournal();
   updateDashboardCounts();
 }
-
 render();
 
 // ---------- events ----------
 if (formEl) {
-  formEl.addEventListener("submit", (e) => {
+  formEl.addEventListener("submit", e => {
     e.preventDefault();
     const text = (textEl?.value || "").trim();
     if (!text) return;
@@ -168,69 +161,78 @@ if (formEl) {
 }
 
 if (journalFormEl) {
-  journalFormEl.addEventListener("submit", (e) => {
+  journalFormEl.addEventListener("submit", e => {
     e.preventDefault();
     const date = document.getElementById("journalDate")?.value;
     const text = document.getElementById("journalText")?.value?.trim();
-    
     if (!date || !text) return;
 
-    const entry = {
+    journalEntries.push({
       id: makeId(),
       date,
       text,
       createdAt: Date.now(),
-    };
-    
-    journalEntries.push(entry);
+    });
     store.set(JOURNAL_KEY, journalEntries);
 
-    // Reset form
     journalFormEl.reset();
-    // Set today's date as default
-    document.getElementById("journalDate").value = new Date().toISOString().split('T')[0];
-    
+    const dateEl = document.getElementById("journalDate");
+    if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
+
     render();
   });
 }
 
+// delegate remove clicks
 if (listEl) {
-  listEl.addEventListener("click", (e) => {
+  listEl.addEventListener("click", e => {
+    const btn = e.target.closest(".t-remove");
+    if (!btn) return;
+    const li = btn.closest("li");
+    if (!li) return;
+    const id = li.getAttribute("data-id");
+    tasks = tasks.filter(t => t.id !== id);
+    store.set(TASKS_KEY, tasks);
+    render();
+  });
+  // use change for checkboxes
+  listEl.addEventListener("change", e => {
+    if (!e.target.classList.contains("t-done")) return;
     const li = e.target.closest("li");
     if (!li) return;
     const id = li.getAttribute("data-id");
-
-    if (e.target.classList.contains("t-remove")) {
-      tasks = tasks.filter((t) => t.id !== id);
-      store.set(TASKS_KEY, tasks);
-      render();
-      return;
-    }
-
-    if (e.target.classList.contains("t-done")) {
-      const checked = e.target.checked;
-      tasks = tasks.map((t) => (t.id === id ? { ...t, done: checked } : t));
-      store.set(TASKS_KEY, tasks);
-      // No need to fully re-render; but safe & simple for now:
-      render();
-    }
+    const checked = e.target.checked;
+    tasks = tasks.map(t => (t.id === id ? { ...t, done: checked } : t));
+    store.set(TASKS_KEY, tasks);
+    render();
   });
 }
 
-// Single theme toggle listener (kept)
+// ---------- theme toggle (single listener + ARIA sync) ----------
 if (toggleEl) {
+  const initialDark = document.documentElement.classList.contains("theme-dark-a");
+  toggleEl.setAttribute("aria-pressed", initialDark ? "true" : "false");
+
   toggleEl.addEventListener("click", () => {
-    const html = document.documentElement;
-    const isDark = html.classList.toggle("theme-dark-a");
-    store.set(THEME_KEY, isDark ? "theme-dark-a" : "");
+    const nowDark = document.documentElement.classList.toggle("theme-dark-a");
+    store.set(THEME_KEY, nowDark ? "theme-dark-a" : "");
+    toggleEl.setAttribute("aria-pressed", nowDark ? "true" : "false");
     updateThemeColor();
   });
 }
 
+// ---------- nav highlighting across pages ----------
+document.querySelectorAll(".main-nav a").forEach(a => {
+  const href = a.getAttribute("href");
+  const here = location.pathname.split("/").pop() || "index.html";
+  const isCurrent = href === here;
+  a.classList.toggle("active", isCurrent);
+  a.toggleAttribute("aria-current", isCurrent);
+});
+
 // Set today's date as default for journal
-if (document.getElementById("journalDate")) {
-  document.getElementById("journalDate").value = new Date().toISOString().split('T')[0];
-}
+const dateEl = document.getElementById("journalDate");
+if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
 
 // Optional: expose for quick console debugging
 window.BP = { tasks, render, store };

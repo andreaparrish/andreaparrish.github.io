@@ -8,14 +8,22 @@
       document.documentElement.className = document.documentElement.className.replace("no-js", "js");
     </script>
 
-    <link rel="stylesheet" href="css/style.css" />
     <title>Balance Planner - Work</title>
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
 
+    <!-- Icons & PWA -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="site.webmanifest" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -24,26 +32,36 @@
       <p class="no-js-msg">Balance Planner needs JavaScript for tasks and saving.</p>
     </noscript>
 
-    <header class="container">
-      <h1>Balance Planner</h1>
+    <header class="site-header">
+      <div class="container">
+        <h1>Balance Planner</h1>
 
-      <!-- Primary Navigation -->
-      <nav class="main-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html" class="nav-link">Dashboard</a></li>
-          <li><a href="personal.html" class="nav-link">Personal</a></li>
-          <li><a href="school.html" class="nav-link">School</a></li>
-          <li>
-            <a href="work.html" class="nav-link active" aria-current="page">Work</a>
-          </li>
-          <li><a href="journal.html" class="nav-link">Journal</a></li>
-          <li>
-            <button id="themeToggle" class="btn theme-toggle" type="button" aria-label="Toggle theme">
-              Theme Toggle
-            </button>
-          </li>
-        </ul>
-      </nav>
+        <!-- Primary Navigation -->
+        <nav class="main-nav" aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li><a href="personal.html" class="nav-link">Personal</a></li>
+            <li><a href="school.html" class="nav-link">School</a></li>
+            <li><a href="work.html" class="nav-link" aria-current="page">Work</a></li>
+            <li><a href="journal.html" class="nav-link">Journal</a></li>
+          </ul>
+        </nav>
+
+        <!-- Utility: theme toggle (not part of nav links) -->
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
+          <span class="toggle-track">
+            <span class="toggle-thumb">
+              <svg class="toggle-icon sun-icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="5" />
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+              </svg>
+              <svg class="toggle-icon moon-icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </span>
+        </button>
+      </div>
     </header>
 
     <main id="main" class="container">
@@ -66,8 +84,10 @@
       </section>
     </main>
 
-    <footer class="container">
-      <small>&copy; 2025 Andrea Parrish</small>
+    <footer class="site-footer">
+      <div class="container">
+        <small>&copy; 2025 Andrea Parrish</small>
+      </div>
     </footer>
 
     <script src="js/app.js" defer></script>

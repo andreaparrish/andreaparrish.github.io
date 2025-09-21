@@ -18,39 +18,19 @@
  * 10. Accessibility Features
  */
 
-/* ==========================================================================
-   1. CSS RESET & BASE STYLES
-   ========================================================================== */
-/*
- * Based on HTML5 Boilerplate with custom modifications.
- * Provides a consistent foundation across all browsers.
- */
+/* 1) RESET & BASE --------------------------------------------------------- */
 
-/* Base HTML element styling */
-html {
-  color: #222; /* Default text color before CSS variables override */
-  font-size: 1em; /* 16px base font size */
-  line-height: 1.4; /* Comfortable reading line height */
-}
-
-/* Universal box-sizing for predictable layouts */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Clean horizontal rule styling */
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
+html {
+  font-size: 1em; /* base 16px */
+  line-height: 1.5; /* better readability */
 }
 
-/* Media element alignment to prevent gaps */
 audio,
 canvas,
 iframe,
@@ -60,42 +40,34 @@ video {
   vertical-align: middle;
 }
 
-/* Form element resets */
 fieldset {
   border: 0;
   margin: 0;
   padding: 0;
 }
-
 textarea {
-  resize: vertical; /* Only allow vertical resizing to prevent layout breaks */
+  resize: vertical;
 }
 
-/* ==========================================================================
-   2. DESIGN SYSTEM - CSS VARIABLES & TOKENS
-   ========================================================================== */
-/*
- * Centralized design tokens for consistent styling across the application.
- * These variables make it easy to maintain brand consistency and implement
- * theme changes.
- */
+/* 2) DESIGN TOKENS (LIGHT) ----------------------------------------------- */
 
 :root {
-  /* Font */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
-    "Segoe UI Emoji", sans-serif;
+  /* Fonts */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  --font-logo: "Great Vibes", cursive;
 
-  /* Color Palette */
-  --bg: #ffffff; /* Primary background color */
-  --text: #111111; /* Primary text color */
-  --muted-text: #555555; /* Secondary/subdued text */
-  --surface: #f7f7f9; /* Card and panel backgrounds */
-  --border: #e5e7eb; /* Subtle borders and dividers */
-  --accent: #4f46e5; /* Brand accent color for links, buttons */
-  --accent-contrast: #ffffff; /* Text color on accent backgrounds */
-  color-scheme: light; /* Browser UI color scheme hint */
+  /* Colors */
+  --bg: #ffffff;
+  --text: #111111;
+  --muted-text: #555555;
+  --surface: #f7f7f9;
+  --border: #e5e7eb;
+  --accent: #4f46e5;
+  --accent-contrast: #ffffff;
+  color-scheme: light;
 
-  /* Spacing Scale - Use these instead of arbitrary values */
+  /* Spacing */
   --space-1: 0.25rem; /* 4px */
   --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
@@ -103,16 +75,13 @@ textarea {
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
 
-  /* Visual Effects */
-  --radius: 12px; /* Border radius for cards, buttons, etc. */
+  /* Effects */
+  --radius: 12px;
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Dark Theme Override */
-/*
- * To activate dark theme, add 'theme-dark-a' class to the <html> element.
- * This provides an alternative color scheme for users who prefer dark interfaces.
- */
+/* 3) DARK THEME (JS toggles .theme-dark-a on <html>) --------------------- */
+
 .theme-dark-a {
   --bg: #0b0b0f;
   --text: #e7e7ea;
@@ -124,15 +93,22 @@ textarea {
   color-scheme: dark;
 }
 
-/* ==========================================================================
-   3. LAYOUT & STRUCTURE
-   ========================================================================== */
-/*
- * Core layout components and structural elements.
- * These provide the foundation for page layouts and content organization.
- */
+/* No-JS dark fallback (respects OS pref only when JS is OFF) */
+@media (prefers-color-scheme: dark) {
+  .no-js {
+    --bg: #0b0b0f;
+    --text: #e7e7ea;
+    --muted-text: #a3a3ad;
+    --surface: #15151b;
+    --border: #2b2b35;
+    --accent: #a78bfa;
+    --accent-contrast: #0b0b0f;
+    color-scheme: dark;
+  }
+}
 
-/* Base body styling with theme support */
+/* 4) LAYOUT & STRUCTURE --------------------------------------------------- */
+
 html,
 body {
   font-family: var(--font-sans);
@@ -141,7 +117,24 @@ body {
   transition: background-color 0.2s linear, color 0.2s linear;
 }
 
-/* Respect user's motion preferences */
+/* Logo styling - only for H1 "Balance Planner" */
+h1 {
+  font-family: var(--font-logo);
+  font-size: 2.5rem;
+  font-weight: normal;
+  line-height: 1.1;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text);
+  margin: 0;
+}
+
+@media (max-width: 47.99rem) {
+  h1 {
+    font-size: 2rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html,
   body {
@@ -149,13 +142,41 @@ body {
   }
 }
 
-/* Main container for content width and centering */
-.container {
-  width: min(100% - 2rem, 72rem); /* Responsive width with max constraint */
-  margin-inline: auto; /* Center horizontally */
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex: 1;
 }
 
-/* Card component for content sections */
+.container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+.site-header,
+.site-footer {
+  background: var(--surface);
+  border-block: 1px solid var(--border);
+}
+
+.site-header .container,
+.site-footer .container,
+main.container {
+  padding-block: var(--space-4);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap; /* wrap nicely on narrow screens */
+}
+
+/* Cards */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -164,7 +185,7 @@ body {
   padding: var(--space-4);
 }
 
-/* Two-column grid layout for dashboard cards */
+/* Simple grid helper */
 @media (min-width: 48rem) {
   .grid-2 {
     display: grid;
@@ -173,155 +194,54 @@ body {
   }
 }
 
-/* ==========================================================================
-   4. NAVIGATION COMPONENTS
-   ========================================================================== */
-/*
- * Navigation styling for the main site navigation.
- * Includes responsive behavior and accessibility features.
- */
+/* 5) TYPOGRAPHY & LINKS --------------------------------------------------- */
 
-.main-nav ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: var(--space-4);
-  align-items: center;
-  font-size: 1rem; /* This will apply to all children consistently */
-}
-
-.main-nav a {
-  display: block;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius);
+a {
+  color: var(--accent);
   text-decoration: none;
-  transition: background-color 0.2s ease;
-  font-size: 1rem;
-  /* Add button-like styling */
-  border: 1px solid transparent;
-  background: transparent;
-  cursor: pointer;
+}
+a:hover {
+  text-decoration: underline;
 }
 
-.main-nav a:hover,
-.main-nav a:focus {
-  background: var(--surface);
-  border-color: var(--border);
-}
-
-.main-nav a.active {
+::selection,
+::-moz-selection {
   background: var(--accent);
   color: var(--accent-contrast);
 }
 
-/* Theme toggle button styling */
-.theme-toggle {
-  padding: var(--space-2);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: inherit; /* This will inherit from .main-nav ul */
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1em 0;
 }
 
-.theme-toggle:hover,
-.theme-toggle:focus {
-  background: var(--surface);
+/* 6) FORMS & INPUTS ------------------------------------------------------- */
+
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-text);
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
   border-color: var(--accent);
 }
 
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  color: var(--text);
-}
+/* 7) BUTTONS -------------------------------------------------------------- */
 
-/* Mobile navigation - stack vertically on small screens */
-@media (max-width: 47.99rem) {
-  .main-nav ul {
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-}
-
-/* ==========================================================================
-   5. DASHBOARD COMPONENTS
-   ========================================================================== */
-/*
- * Dashboard-specific styling for the main application interface.
- * Includes overview cards, statistics, and dashboard layout.
- */
-
-.dashboard-overview h2 {
-  margin-bottom: var(--space-4);
-}
-
-/* Overview cards grid layout */
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-}
-
-.overview-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  text-align: center;
-}
-
-.overview-card h3 {
-  margin: 0 0 var(--space-2) 0;
-  color: var(--accent);
-}
-
-.task-count,
-.journal-count {
-  margin: 0;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-/* ==========================================================================
-   6. FORM COMPONENTS
-   ========================================================================== */
-/*
- * Form styling for user input elements.
- * Includes journal forms, task forms, and other input components.
- */
-
-#journalForm {
-  display: grid;
-  gap: var(--space-3);
-  margin-bottom: var(--space-6);
-}
-
-#journalForm label {
-  font-weight: bold;
-  color: var(--accent);
-}
-
-#journalText {
-  min-height: 100px;
-  font-family: inherit;
-}
-
-/* ==========================================================================
-   7. BUTTONS & INTERACTIVE ELEMENTS
-   ========================================================================== */
-/*
- * Button styling and interactive element states.
- * Ensures consistent interaction patterns across the application.
- */
-
-/* Primary button styling */
 .btn {
   display: inline-block;
   background: var(--accent);
@@ -331,80 +251,172 @@ body {
   padding: 0.6rem 1rem;
   cursor: pointer;
 }
-
-/* Enhanced focus styling for accessibility */
 .btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-
 .btn:focus {
-  outline: none; /* Let :focus-visible handle focus styling */
+  outline: none;
+} /* let :focus-visible handle it */
+
+/* 8) NAVIGATION ----------------------------------------------------------- */
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: var(--space-4);
+  align-items: center;
+  font-size: 1rem;
 }
-
-/* ==========================================================================
-   8. TYPOGRAPHY & TEXT STYLING
-   ========================================================================== */
-/*
- * Text styling, links, and typography rules.
- * Ensures consistent text appearance and interaction states.
- */
-
-/* Link styling with hover states */
-a {
-  color: var(--accent);
-  text-decoration: none;
+.main-nav a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: transparent;
 }
-
-a:hover {
-  text-decoration: underline;
+@media (hover: hover) {
+  .main-nav a:hover,
+  .main-nav a:focus {
+    background: var(--surface);
+    border-color: var(--border);
+  }
 }
-
-/* Text selection styling */
-::selection {
+.main-nav a[aria-current="page"],
+.main-nav a.active {
   background: var(--accent);
   color: var(--accent-contrast);
 }
+/* Stack nav on small screens */
+@media (max-width: 47.99rem) {
+  .main-nav ul {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
 
-::-moz-selection {
+/* 9) THEME TOGGLE --------------------------------------------------------- */
+
+.theme-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: inherit;
+}
+.toggle-track {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: var(--border);
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+.toggle-thumb {
+  position: absolute;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  background: var(--bg);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* dark mode states */
+.theme-dark-a .toggle-track {
   background: var(--accent);
-  color: var(--accent-contrast);
+}
+.theme-dark-a .toggle-thumb {
+  transform: translateX(32px);
+  background: var(--surface);
 }
 
-/* Update hr to use design system colors */
-hr {
-  border-top: 1px solid var(--border);
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* ==========================================================================
-   9. PAGE-SPECIFIC STYLES
-   ========================================================================== */
-/*
- * Styles specific to individual pages or sections.
- * Organized by page/component for easy maintenance.
- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
 
-/* Page header styling */
-.page-header {
-  margin-top: var(--space-4); /* Add space above the page header */
+/* 10) DASHBOARD / CONTENT ------------------------------------------------- */
+
+.dashboard-overview h2 {
   margin-bottom: var(--space-4);
 }
 
-.page-header h2 {
-  margin: 0 0 var(--space-2) 0;
-  color: var(--accent);
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
 }
-
-/* Task and journal sections */
-.task-section,
-.journal-section {
+.overview-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: var(--space-4);
+  text-align: center;
+}
+.overview-card h3 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--accent);
+}
+.task-count,
+.journal-count {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 700;
 }
 
-/* Journal entry styling */
+/* Tasks */
+#taskList {
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+.task-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+.task-item.completed label {
+  color: var(--muted-text);
+  text-decoration: line-through;
+}
+
+/* Journal */
+#journalForm {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+#journalForm label {
+  font-weight: 600;
+  color: var(--accent);
+}
+#journalText {
+  min-height: 100px;
+  font-family: inherit;
+}
 .journal-entry {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -412,27 +424,18 @@ hr {
   padding: var(--space-3);
   margin-bottom: var(--space-3);
 }
-
 .journal-entry h4 {
   margin: 0 0 var(--space-2) 0;
   color: var(--accent);
   font-size: 0.9em;
 }
-
 .journal-entry p {
   margin: 0;
-  white-space: pre-wrap; /* Preserve line breaks in journal entries */
+  white-space: pre-wrap;
 }
 
-/* ==========================================================================
-   10. UTILITY CLASSES
-   ========================================================================== */
-/*
- * Small, reusable utility classes for common styling needs.
- * Use these for quick styling adjustments without creating new components.
- */
+/* 11) UTILITIES & ACCESSIBILITY ------------------------------------------ */
 
-/* Visibility utilities */
 .hidden,
 [hidden] {
   display: none !important;
@@ -440,52 +443,31 @@ hr {
 
 .visually-hidden {
   border: 0;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0 0 0 0);
   height: 1px;
+  width: 1px;
   margin: -1px;
   overflow: hidden;
   padding: 0;
   position: absolute;
   white-space: nowrap;
-  width: 1px;
 }
-
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
+.visually-hidden.focusable:focus,
+.visually-hidden.focusable:active {
   clip: auto;
   height: auto;
+  width: auto;
   margin: 0;
   overflow: visible;
   position: static;
   white-space: inherit;
-  width: auto;
 }
 
 .invisible {
   visibility: hidden;
 }
 
-/* Layout utilities */
-.clearfix::before,
-.clearfix::after {
-  content: "";
-  display: table;
-}
-
-.clearfix::after {
-  clear: both;
-}
-
-/* ==========================================================================
-   11. ACCESSIBILITY FEATURES
-   ========================================================================== */
-/*
- * Accessibility-focused styling and features.
- * Ensures the application is usable by all users, including those using
- * assistive technologies.
- */
-
-/* Skip link for keyboard navigation */
+/* Skip link */
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -495,18 +477,16 @@ hr {
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
 }
-
 .skip-link:focus {
   left: 1rem;
   top: 1rem;
   z-index: 1000;
 }
 
-/* JavaScript dependency handling */
+/* JS dependency */
 .no-js .requires-js {
   display: none;
 }
-
 .no-js-msg {
   background: #fff3cd;
   color: #664d03;
@@ -514,34 +494,15 @@ hr {
   border-radius: 0.5rem;
 }
 
-/* ==========================================================================
-   12. RESPONSIVE DESIGN
-   ========================================================================== */
-/*
- * Media queries for responsive behavior across different screen sizes.
- * Organized from smallest to largest breakpoints.
- */
+/* 12) RESPONSIVE HOOKS ---------------------------------------------------- */
 
-/* Tablet and larger screens */
 @media only screen and (min-width: 35em) {
-  /* Add tablet-specific adjustments here as needed */
+  /* tablet+ tweaks can go here as you build */
 }
 
-/* High-DPI display optimizations */
-@media print, (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 1.25dppx), (min-resolution: 120dpi) {
-  /* High-DPI display tweaks for crisp rendering */
-}
-
-/* ==========================================================================
-   13. PRINT STYLES
-   ========================================================================== */
-/*
- * Optimized styling for printed pages.
- * Ensures content is readable and ink-friendly when printed.
- */
+/* 13) PRINT --------------------------------------------------------------- */
 
 @media print {
-  /* Reset all colors and effects for print */
   *,
   *::before,
   *::after {
@@ -550,53 +511,38 @@ hr {
     box-shadow: none !important;
     text-shadow: none !important;
   }
-
-  /* Make links visible on paper */
   a,
   a:visited {
     text-decoration: underline;
   }
-
-  /* Show URLs after links */
   a[href]::after {
     content: " (" attr(href) ")";
   }
-
-  /* Expand abbreviations */
   abbr[title]::after {
     content: " (" attr(title) ")";
   }
-
-  /* Don't print fragment or javascript links */
   a[href^="#"]::after,
   a[href^="javascript:"]::after {
     content: "";
   }
-
-  /* Code and quote formatting */
   pre {
     white-space: pre-wrap !important;
   }
-
   pre,
   blockquote {
     border: 1px solid #999;
     page-break-inside: avoid;
   }
-
-  /* Prevent awkward page breaks */
   tr,
   img {
     page-break-inside: avoid;
   }
-
   p,
   h2,
   h3 {
     orphans: 3;
     widows: 3;
   }
-
   h2,
   h3 {
     page-break-after: avoid;

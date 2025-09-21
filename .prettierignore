@@ -1,0 +1,9 @@
+# Ignore HTML files to prevent trailing slash issues
+*.html
+
+# Keep other files formatted
+!*.js
+!*.css
+!*.json
+
+

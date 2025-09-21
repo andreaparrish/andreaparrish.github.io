@@ -4,12 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Swap no-js -> js as early as possible so CSS applies correctly -->
+    <!-- Swap no-js -> js early so CSS that depends on it takes effect -->
     <script>
-      document.documentElement.className = document.documentElement.className.replace("no-js", "js");
+      document.documentElement.className =
+        document.documentElement.className.replace("no-js", "js");
     </script>
-
-    <link rel="stylesheet" href="css/style.css" />
 
     <title>Balance Planner - Dashboard</title>
     <meta
@@ -22,11 +21,19 @@
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="bingbot" content="noindex, nofollow" />
 
-    <!-- Icons -->
+    <!-- Icons & PWA -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="site.webmanifest" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -34,33 +41,37 @@
     <!-- Shows only when JS is off -->
     <noscript>
       <p class="no-js-msg">
-        Balance Planner needs JavaScript for tasks and saving. You can still read the page, but interactive features are
-        disabled.
+        Balance Planner needs JavaScript for tasks and saving. You can still
+        read the page, but interactive features are disabled.
       </p>
     </noscript>
 
-    <header class="container">
-      <h1>Balance Planner</h1>
+    <!-- Full-bleed header; content centered by inner .container -->
+    <header class="site-header">
+      <div class="container">
+        <h1>Balance Planner</h1>
 
-      <!-- Primary Navigation -->
-      <nav class="main-nav" aria-label="Main navigation">
-        <ul>
-          <li>
-            <a href="index.html" class="nav-link active" aria-current="page">Dashboard</a>
-          </li>
-          <li><a href="personal.html" class="nav-link">Personal</a></li>
-          <li><a href="school.html" class="nav-link">School</a></li>
-          <li><a href="work.html" class="nav-link">Work</a></li>
-          <li><a href="journal.html" class="nav-link">Journal</a></li>
-          <li>
-            <button id="themeToggle" class="btn theme-toggle" type="button" aria-label="Toggle theme">
-              Theme Toggle
-            </button>
-          </li>
-        </ul>
-      </nav>
+        <!-- Primary Navigation -->
+        <nav class="main-nav" aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html" class="nav-link" aria-current="page">Dashboard</a></li>
+            <li><a href="personal.html" class="nav-link">Personal</a></li>
+            <li><a href="school.html" class="nav-link">School</a></li>
+            <li><a href="work.html" class="nav-link">Work</a></li>
+            <li><a href="journal.html" class="nav-link">Journal</a></li>
+          </ul>
+        </nav>
+
+        <!-- Utility: theme toggle (not part of nav links) -->
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
+          <span class="toggle-track">
+            <span class="toggle-thumb"></span>
+          </span>
+        </button>
+      </div>
     </header>
 
+    <!-- Main content (centered by .container) -->
     <main id="main" class="container">
       <section class="page-header">
         <h2>Dashboard</h2>
@@ -118,8 +129,11 @@
       </section>
     </main>
 
-    <footer class="container">
-      <small>&copy; 2025 Andrea Parrish</small>
+    <!-- Full-bleed footer; content centered by inner .container -->
+    <footer class="site-footer">
+      <div class="container">
+        <small>&copy; 2025 Andrea Parrish</small>
+      </div>
     </footer>
 
     <!-- App code loads after HTML is parsed -->
