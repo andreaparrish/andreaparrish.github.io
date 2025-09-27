@@ -259,6 +259,47 @@ textarea:focus-visible {
   outline: none;
 } /* let :focus-visible handle it */
 
+/* Footer content layout */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Small button variant */
+.btn-small {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.875rem;
+}
+
+/* Danger button styling */
+.btn-danger {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  text-decoration: none;
+}
+
+.btn-danger:focus-visible {
+  outline: 2px solid #dc2626;
+  outline-offset: 2px;
+}
+
+/* Responsive footer layout */
+@media (max-width: 47.99rem) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-3);
+  }
+}
+
 /* 8) NAVIGATION ----------------------------------------------------------- */
 
 .main-nav ul {

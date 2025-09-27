@@ -230,6 +230,33 @@ document.querySelectorAll(".main-nav a").forEach(a => {
   a.toggleAttribute("aria-current", isCurrent);
 });
 
+// Clear all data functionality
+const clearDataBtn = document.getElementById('clearDataBtn');
+if (clearDataBtn) {
+  clearDataBtn.addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+      // Clear localStorage
+      localStorage.removeItem('bp:tasks');
+      localStorage.removeItem('bp:journal');
+      localStorage.removeItem('bp:theme');
+      
+      // Reset variables
+      tasks = [];
+      journalEntries = [];
+      theme = '';
+      
+      // Remove theme class
+      document.documentElement.classList.remove('theme-dark-a');
+      
+      // Re-render
+      render();
+      
+      // Show success message
+      alert('All data has been cleared.');
+    }
+  });
+}
+
 // Set today's date as default for journal
 const dateEl = document.getElementById("journalDate");
 if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];

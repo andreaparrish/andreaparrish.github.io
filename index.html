@@ -127,12 +127,25 @@
         <h2>Recent Tasks</h2>
         <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
       </section>
+
+      <!-- Recent Journal Entries -->
+      <section class="recent-journal">
+        <h2>Recent Journal Entries</h2>
+        <div id="journalEntries" aria-live="polite"></div>
+      </section>
+
     </main>
 
     <!-- Full-bleed footer; content centered by inner .container -->
+    <!-- In footer -->
     <footer class="site-footer">
       <div class="container">
-        <small>&copy; 2025 Andrea Parrish</small>
+        <div class="footer-content">
+          <small>&copy; 2025 Andrea Parrish</small>
+          <button id="clearDataBtn" class="btn btn-small btn-danger" type="button">
+            Clear All Data
+          </button>
+        </div>
       </div>
     </footer>
 
