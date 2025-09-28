@@ -210,14 +210,21 @@ function renderTasks(filterCategory = null) {
 
 /**
  * Render journal entries to the journal section
+ * @param {boolean} limitToRecent - If true, show only the 2 most recent entries (for dashboard)
  */
-function renderJournal() {
+function renderJournal(limitToRecent = false) {
   const entriesEl = document.getElementById("journalEntries");
   if (!entriesEl) return;
 
-  // Sort entries by date (newest first) and generate HTML
-  entriesEl.innerHTML = journalEntries
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
+  // Sort entries by date (newest first) and optionally limit to recent entries
+  let entriesToShow = journalEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  if (limitToRecent) {
+    entriesToShow = entriesToShow.slice(0, 2); // Show only the 2 most recent entries
+  }
+
+  // Generate HTML
+  entriesEl.innerHTML = entriesToShow
     .map(entry => `
       <div class="journal-entry">
         <h4>${new Date(entry.date).toLocaleDateString()}</h4>
@@ -234,6 +241,7 @@ function render() {
   // Determine which category to filter by based on current page
   const currentPath = window.location.pathname;
   let filterCategory = null;
+  let limitJournalToRecent = false;
   
   if (currentPath.includes("personal.html")) {
     filterCategory = "Personal";
@@ -241,11 +249,14 @@ function render() {
     filterCategory = "School";
   } else if (currentPath.includes("work.html")) {
     filterCategory = "Work";
+  } else if (currentPath.includes("index.html") || currentPath.endsWith("/")) {
+    // On dashboard, limit journal entries to 2 most recent
+    limitJournalToRecent = true;
   }
 
   // Render all components
   renderTasks(filterCategory);
-  renderJournal();
+  renderJournal(limitJournalToRecent);
   updateDashboardCounts();
 }
 
