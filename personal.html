@@ -4,39 +4,44 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Progressive Enhancement: Remove no-js class when JavaScript loads -->
     <script>
       document.documentElement.className = document.documentElement.className.replace("no-js", "js");
     </script>
 
     <title>Balance Planner - Personal</title>
+    <!-- SEO: Keep site private for student project -->
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
 
-    <!-- Icons & PWA -->
+    <!-- Favicon and PWA manifest for mobile app-like experience -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="site.webmanifest" />
 
-    <!-- Fonts -->
+    <!-- Google Fonts: Great Vibes for logo styling -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- External CSS stylesheet -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <!-- Accessibility: Skip link for keyboard users -->
     <a href="#main" class="skip-link">Skip to content</a>
 
+    <!-- Progressive Enhancement: Message for users without JavaScript -->
     <noscript>
       <p class="no-js-msg">Balance Planner needs JavaScript for tasks and saving.</p>
     </noscript>
 
+    <!-- Site header with navigation and branding -->
     <header class="site-header">
       <div class="container">
         <h1>Balance Planner</h1>
 
-        <!-- Primary Navigation -->
+        <!-- Main site navigation using semantic nav element -->
         <nav class="main-nav" aria-label="Main navigation">
           <ul>
             <li><a href="index.html" class="nav-link">Dashboard</a></li>
@@ -47,7 +52,7 @@
           </ul>
         </nav>
 
-        <!-- Utility: theme toggle (not part of nav links) -->
+        <!-- Accessibility: Theme toggle with ARIA labels -->
         <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
           <span class="toggle-track">
             <span class="toggle-thumb"></span>
@@ -56,17 +61,18 @@
       </div>
     </header>
 
+    <!-- Main content area with semantic landmark -->
     <main id="main" class="container">
-      <!-- Grid Container for main content -->
+      <!-- CSS Grid: 12-column layout system -->
       <div class="grid-container">
-        <!-- Page Header - 12 columns -->
+        <!-- Page title and description spanning full width -->
         <section class="page-header col-12">
           <h2>Personal Tasks</h2>
           <p>Manage your home and family responsibilities. Use the checklist to manage errands, chores, and personal goals. Mark items complete to see your progress add up.
           </p>
         </section>
 
-        <!-- Task Form - 4 columns (left side) -->
+        <!-- Form section: 4 columns using CSS Grid -->
         <section class="task-form col-4">
           <h2>Add New Task</h2>
           <form id="taskForm">
@@ -79,7 +85,7 @@
           </form>
         </section>
 
-        <!-- Recent Tasks - 8 columns (right side) -->
+        <!-- Task list display: 8 columns using CSS Grid -->
         <section class="recent-tasks col-8">
           <h2>Recent Tasks</h2>
           <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
@@ -87,6 +93,7 @@
       </div>
     </main>
 
+    <!-- Site footer with copyright and utility buttons -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-content">
@@ -98,6 +105,7 @@
       </div>
     </footer>
 
+    <!-- JavaScript: Load after HTML parsing with defer attribute -->
     <script src="js/app.js" defer></script>
   </body>
 </html>

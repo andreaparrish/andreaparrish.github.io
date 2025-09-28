@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Swap no-js -> js early so CSS that depends on it takes effect -->
+    <!-- Progressive Enhancement: Remove no-js class when JavaScript loads -->
     <script>
       document.documentElement.className =
         document.documentElement.className.replace("no-js", "js");
@@ -16,29 +16,30 @@
       content="A simple planner site with tabs for Home, School, Work, and Journal to help busy adults stay organized."
     />
 
-    <!-- Keep private -->
+    <!-- SEO: Keep site private for student project -->
     <meta name="robots" content="noindex, nofollow, noarchive, noimageindex" />
     <meta name="googlebot" content="noindex, nofollow" />
     <meta name="bingbot" content="noindex, nofollow" />
 
-    <!-- Icons & PWA -->
+    <!-- Favicon and PWA manifest for mobile app-like experience -->
     <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="site.webmanifest" />
 
-    <!-- Fonts -->
+    <!-- Google Fonts: Great Vibes for logo styling -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
+    <!-- External CSS stylesheet -->
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    <!-- Accessibility: Skip link for keyboard users -->
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <!-- Shows only when JS is off -->
+    <!-- Progressive Enhancement: Message for users without JavaScript -->
     <noscript>
       <p class="no-js-msg">
         Balance Planner needs JavaScript for tasks and saving. You can still
@@ -46,12 +47,12 @@
       </p>
     </noscript>
 
-    <!-- Full-bleed header; content centered by inner .container -->
+    <!-- Site header with navigation and branding -->
     <header class="site-header">
       <div class="container">
         <h1>Balance Planner</h1>
 
-        <!-- Primary Navigation -->
+        <!-- Main site navigation using semantic nav element -->
         <nav class="main-nav" aria-label="Main navigation">
           <ul>
             <li><a href="index.html" class="nav-link" aria-current="page">Dashboard</a></li>
@@ -62,7 +63,7 @@
           </ul>
         </nav>
 
-        <!-- Utility: theme toggle (not part of nav links) -->
+        <!-- Accessibility: Theme toggle with ARIA labels -->
         <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
           <span class="toggle-track">
             <span class="toggle-thumb"></span>
@@ -71,9 +72,9 @@
       </div>
     </header>
 
-    <!-- Main content (centered by .container) -->
+    <!-- Main content area with semantic landmark -->
     <main id="main" class="container">
-      <!-- Page Header - 12 columns -->
+      <!-- Page title and description spanning full width -->
       <section class="page-header col-12">
         <h2>Dashboard</h2>
         <p>
@@ -82,9 +83,9 @@
         </p>
       </section>
 
-      <!-- Grid Container for main content -->
+      <!-- CSS Grid: 12-column layout system -->
       <div class="grid-container">
-        <!-- Dashboard Overview - 8 columns -->
+        <!-- Dashboard cards: 8 columns using CSS Grid -->
         <section class="dashboard-overview col-8">
           <h2>Today's Overview</h2>
           <div class="overview-grid grid-container">
@@ -107,7 +108,7 @@
           </div>
         </section>
 
-        <!-- Quick Add Task - 4 columns (right side of overview) -->
+        <!-- Quick task form: 4 columns using CSS Grid -->
         <section class="quick-add col-4">
           <h2>Quick Add Task</h2>
           <form id="taskForm">
@@ -127,13 +128,13 @@
           </form>
         </section>
 
-        <!-- Recent Tasks - 6 columns (left side) -->
+        <!-- Recent tasks display: 6 columns using CSS Grid -->
         <section class="recent-tasks col-6">
           <h2>Recent Tasks</h2>
           <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
         </section>
 
-        <!-- Recent Journal Entries - 6 columns (right side) -->
+        <!-- Recent journal entries: 6 columns using CSS Grid -->
         <section class="recent-journal col-6">
           <h2>Recent Journal Entries</h2>
           <div id="journalEntries" aria-live="polite"></div>
@@ -142,8 +143,7 @@
 
     </main>
 
-    <!-- Full-bleed footer; content centered by inner .container -->
-    <!-- In footer -->
+    <!-- Site footer with copyright and utility buttons -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-content">
@@ -155,7 +155,7 @@
       </div>
     </footer>
 
-    <!-- App code loads after HTML is parsed -->
+    <!-- JavaScript: Load after HTML parsing with defer attribute -->
     <script src="js/app.js" defer></script>
   </body>
 </html>
