@@ -2,23 +2,23 @@
    BALANCE PLANNER - MAIN STYLESHEET
    ========================================================================== */
 /*
- * A comprehensive stylesheet for the Balance Planner web application.
- * This file contains all styles organized by functionality and scope.
- * 
  * Table of Contents:
  * 1. CSS Reset & Base Styles
  * 2. Design System (Variables & Tokens)
- * 3. Layout & Structure
- * 4. Navigation Components
- * 5. Dashboard Components
- * 6. Form Components
- * 7. Utility Classes
- * 8. Responsive Design
- * 9. Print Styles
- * 10. Accessibility Features
+ * 3. Typography & Base Elements
+ * 4. Layout & Structure
+ * 5. Navigation Components
+ * 6. Form Components & Buttons
+ * 7. Dashboard & Content Components
+ * 8. Theme Toggle Component
+ * 9. Utility Classes & Accessibility
+ * 10. Responsive Design
+ * 11. Print Styles
  */
 
-/* 1) RESET & BASE --------------------------------------------------------- */
+/* ==========================================================================
+   1. CSS RESET & BASE STYLES
+   ========================================================================== */
 
 *,
 *::before,
@@ -45,11 +45,14 @@ fieldset {
   margin: 0;
   padding: 0;
 }
+
 textarea {
   resize: vertical;
 }
 
-/* 2) DESIGN TOKENS (LIGHT) ----------------------------------------------- */
+/* ==========================================================================
+   2. DESIGN SYSTEM (VARIABLES & TOKENS)
+   ========================================================================== */
 
 :root {
   /* Fonts */
@@ -57,13 +60,13 @@ textarea {
     Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
   --font-logo: "Great Vibes", cursive;
 
-  /* Colors */
-  --bg: #ffffff;
-  --text: #111111;
-  --muted-text: #555555;
-  --surface: #f7f7f9;
-  --border: #e5e7eb;
-  --accent: #4f46e5;
+  /* Colors - Pure Monochromatic Gray Theme */
+  --bg: #fafafa;
+  --text: #000000;
+  --muted-text: #808080;
+  --surface: #f0f0f0;
+  --border: #cccccc;
+  --accent: #333333;
   --accent-contrast: #ffffff;
   color-scheme: light;
 
@@ -80,34 +83,35 @@ textarea {
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* 3) DARK THEME (JS toggles .theme-dark-a on <html>) --------------------- */
-
+/* Dark Theme - Pure Monochromatic Gray Theme */
 .theme-dark-a {
-  --bg: #0b0b0f;
-  --text: #e7e7ea;
-  --muted-text: #a3a3ad;
-  --surface: #15151b;
-  --border: #2b2b35;
-  --accent: #a78bfa;
-  --accent-contrast: #0b0b0f;
+  --bg: #000000;
+  --text: #ffffff;
+  --muted-text: #999999;
+  --surface: #1a1a1a;
+  --border: #404040;
+  --accent: #cccccc;
+  --accent-contrast: #000000;
   color-scheme: dark;
 }
 
 /* No-JS dark fallback (respects OS pref only when JS is OFF) */
 @media (prefers-color-scheme: dark) {
   .no-js {
-    --bg: #0b0b0f;
-    --text: #e7e7ea;
-    --muted-text: #a3a3ad;
-    --surface: #15151b;
-    --border: #2b2b35;
-    --accent: #a78bfa;
-    --accent-contrast: #0b0b0f;
+    --bg: #000000;
+    --text: #ffffff;
+    --muted-text: #999999;
+    --surface: #1a1a1a;
+    --border: #404040;
+    --accent: #cccccc;
+    --accent-contrast: #000000;
     color-scheme: dark;
   }
 }
 
-/* 4) LAYOUT & STRUCTURE --------------------------------------------------- */
+/* ==========================================================================
+   3. TYPOGRAPHY & BASE ELEMENTS
+   ========================================================================== */
 
 html,
 body {
@@ -115,6 +119,16 @@ body {
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.2s linear, color 0.2s linear;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
 }
 
 /* Logo styling - only for H1 "Balance Planner" */
@@ -129,27 +143,33 @@ h1 {
   margin: 0;
 }
 
-@media (max-width: 47.99rem) {
-  h1 {
-    font-size: 2rem;
-  }
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html,
-  body {
-    transition: none;
-  }
+a:hover {
+  text-decoration: underline;
 }
 
-body {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+/* Selection styling */
+::selection,
+::-moz-selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
-main {
-  flex: 1;
+
+/* Horizontal rule */
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1em 0;
 }
+
+/* ==========================================================================
+   4. LAYOUT & STRUCTURE
+   ========================================================================== */
 
 .container {
   width: min(100% - 2rem, 72rem);
@@ -167,10 +187,34 @@ main {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
 }
 
+/* Add overlay for better text readability */
+.site-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+/* Dark theme header background */
 .theme-dark-a .site-header {
   background-image: url("../img/dark-banner.jpg");
+}
+
+.theme-dark-a .site-header::before {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure header content is above overlay */
+.site-header .container {
+  position: relative;
+  z-index: 1;
 }
 
 .site-header .container,
@@ -179,12 +223,21 @@ main.container {
   padding-block: var(--space-4);
 }
 
+/* Header layout */
 .site-header .container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  flex-wrap: wrap; /* wrap nicely on narrow screens */
+  flex-wrap: wrap;
+}
+
+/* Footer content layout */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 /* Cards */
@@ -205,113 +258,9 @@ main.container {
   }
 }
 
-/* 5) TYPOGRAPHY & LINKS --------------------------------------------------- */
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-::selection,
-::-moz-selection {
-  background: var(--accent);
-  color: var(--accent-contrast);
-}
-
-hr {
-  border: 0;
-  border-top: 1px solid var(--border);
-  margin: 1em 0;
-}
-
-/* 6) FORMS & INPUTS ------------------------------------------------------- */
-
-input,
-select,
-textarea {
-  font: inherit;
-  color: var(--text);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.5rem 0.75rem;
-}
-input::placeholder,
-textarea::placeholder {
-  color: var(--muted-text);
-}
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-color: var(--accent);
-}
-
-/* 7) BUTTONS -------------------------------------------------------------- */
-
-.btn {
-  display: inline-block;
-  background: var(--accent);
-  color: var(--accent-contrast);
-  border: 0;
-  border-radius: 0.6rem;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-}
-.btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.btn:focus {
-  outline: none;
-} /* let :focus-visible handle it */
-
-/* Footer content layout */
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-/* Small button variant */
-.btn-small {
-  padding: var(--space-2) var(--space-3);
-  font-size: 0.875rem;
-}
-
-/* Danger button styling */
-.btn-danger {
-  background: #dc2626;
-  color: white;
-  border-color: #dc2626;
-}
-
-.btn-danger:hover {
-  background: #b91c1c;
-  border-color: #b91c1c;
-  text-decoration: none;
-}
-
-.btn-danger:focus-visible {
-  outline: 2px solid #dc2626;
-  outline-offset: 2px;
-}
-
-/* Responsive footer layout */
-@media (max-width: 47.99rem) {
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--space-3);
-  }
-}
-
-/* 8) NAVIGATION ----------------------------------------------------------- */
+/* ==========================================================================
+   5. NAVIGATION COMPONENTS
+   ========================================================================== */
 
 .main-nav ul {
   display: flex;
@@ -322,6 +271,7 @@ textarea:focus-visible {
   align-items: center;
   font-size: 1rem;
 }
+
 .main-nav a {
   display: block;
   padding: var(--space-2) var(--space-3);
@@ -329,6 +279,7 @@ textarea:focus-visible {
   border: 1px solid transparent;
   background: transparent;
 }
+
 @media (hover: hover) {
   .main-nav a:hover,
   .main-nav a:focus {
@@ -336,77 +287,104 @@ textarea:focus-visible {
     border-color: var(--border);
   }
 }
+
 .main-nav a[aria-current="page"],
 .main-nav a.active {
   background: var(--accent);
   color: var(--accent-contrast);
 }
-/* Stack nav on small screens */
-@media (max-width: 47.99rem) {
-  .main-nav ul {
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-}
 
-/* 9) THEME TOGGLE --------------------------------------------------------- */
+/* ==========================================================================
+   6. FORM COMPONENTS & BUTTONS
+   ========================================================================== */
 
-.theme-toggle {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: inherit;
-}
-.toggle-track {
-  position: relative;
-  width: 60px;
-  height: 30px;
-  background: var(--border);
-  border-radius: 15px;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-}
-.toggle-thumb {
-  position: absolute;
-  left: 2px;
-  width: 26px;
-  height: 26px;
+/* Form inputs */
+input,
+select,
+textarea {
+  font: inherit;
+  color: var(--text);
   background: var(--bg);
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
 }
 
-/* dark mode states */
-.theme-dark-a .toggle-track {
-  background: var(--accent);
-}
-.theme-dark-a .toggle-thumb {
-  transform: translateX(32px);
-  background: var(--surface);
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-text);
 }
 
-.theme-toggle:focus-visible {
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-color: var(--accent);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-  }
+/* Buttons */
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: 0;
+  border-radius: 0.6rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
 }
 
-/* 10) DASHBOARD / CONTENT ------------------------------------------------- */
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+/* Button variants */
+.btn-small {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.875rem;
+}
+
+.btn-danger {
+  background: #8b5a5a;
+  color: white;
+  border-color: #8b5a5a;
+}
+
+.btn-danger:hover {
+  background: #7a4d4d;
+  border-color: #7a4d4d;
+  text-decoration: none;
+}
+
+.btn-danger:focus-visible {
+  outline: 2px solid #8b5a5a;
+  outline-offset: 2px;
+}
+
+/* Dark mode specific danger button colors */
+.theme-dark-a .btn-danger {
+  background: #6b4444;
+  color: #f5f5f5;
+  border-color: #6b4444;
+}
+
+.theme-dark-a .btn-danger:hover {
+  background: #5a3939;
+  border-color: #5a3939;
+}
+
+.theme-dark-a .btn-danger:focus-visible {
+  outline: 2px solid #6b4444;
+}
+
+/* ==========================================================================
+   7. DASHBOARD & CONTENT COMPONENTS
+   ========================================================================== */
 
 .dashboard-overview h2 {
   margin-bottom: var(--space-4);
@@ -418,6 +396,7 @@ textarea:focus-visible {
   gap: var(--space-4);
   margin-bottom: var(--space-8);
 }
+
 .overview-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -425,10 +404,12 @@ textarea:focus-visible {
   padding: var(--space-4);
   text-align: center;
 }
+
 .overview-card h3 {
   margin: 0 0 var(--space-2) 0;
   color: var(--accent);
 }
+
 .task-count,
 .journal-count {
   margin: 0;
@@ -444,12 +425,14 @@ textarea:focus-visible {
   display: grid;
   gap: var(--space-2);
 }
+
 .task-item {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.5rem;
 }
+
 .task-item.completed label {
   color: var(--muted-text);
   text-decoration: line-through;
@@ -461,14 +444,17 @@ textarea:focus-visible {
   gap: var(--space-3);
   margin-bottom: var(--space-6);
 }
+
 #journalForm label {
   font-weight: 600;
   color: var(--accent);
 }
+
 #journalText {
   min-height: 100px;
   font-family: inherit;
 }
+
 .journal-entry {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -476,18 +462,79 @@ textarea:focus-visible {
   padding: var(--space-3);
   margin-bottom: var(--space-3);
 }
+
 .journal-entry h4 {
   margin: 0 0 var(--space-2) 0;
   color: var(--accent);
   font-size: 0.9em;
 }
+
 .journal-entry p {
   margin: 0;
   white-space: pre-wrap;
 }
 
-/* 11) UTILITIES & ACCESSIBILITY ------------------------------------------ */
+/* ==========================================================================
+   8. THEME TOGGLE COMPONENT
+   ========================================================================== */
 
+.theme-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: inherit;
+}
+
+.toggle-track {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: var(--border);
+  border-radius: 15px;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-thumb {
+  position: absolute;
+  left: 2px;
+  width: 26px;
+  height: 26px;
+  background: var(--bg);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dark mode states */
+.theme-dark-a .toggle-track {
+  background: var(--accent);
+}
+
+.theme-dark-a .toggle-thumb {
+  transform: translateX(32px);
+  background: var(--surface);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   9. UTILITY CLASSES & ACCESSIBILITY
+   ========================================================================== */
+
+/* Visibility utilities */
 .hidden,
 [hidden] {
   display: none !important;
@@ -504,6 +551,7 @@ textarea:focus-visible {
   position: absolute;
   white-space: nowrap;
 }
+
 .visually-hidden.focusable:focus,
 .visually-hidden.focusable:active {
   clip: auto;
@@ -529,6 +577,7 @@ textarea:focus-visible {
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
 }
+
 .skip-link:focus {
   left: 1rem;
   top: 1rem;
@@ -539,6 +588,7 @@ textarea:focus-visible {
 .no-js .requires-js {
   display: none;
 }
+
 .no-js-msg {
   background: #fff3cd;
   color: #664d03;
@@ -546,13 +596,142 @@ textarea:focus-visible {
   border-radius: 0.5rem;
 }
 
-/* 12) RESPONSIVE HOOKS ---------------------------------------------------- */
+/* ==========================================================================
+   10. RESPONSIVE DESIGN
+   ========================================================================== */
 
-@media only screen and (min-width: 35em) {
-  /* tablet+ tweaks can go here as you build */
+/* Small mobile devices (320px and up) */
+@media only screen and (min-width: 20em) {
+  .container {
+    width: min(100% - 1rem, 72rem);
+  }
 }
 
-/* 13) PRINT --------------------------------------------------------------- */
+/* Large mobile devices and small tablets */
+@media only screen and (min-width: 35em) {
+  .container {
+    width: min(100% - 1.5rem, 72rem);
+  }
+}
+
+/* Tablets and small desktops */
+@media only screen and (min-width: 48em) {
+  .container {
+    width: min(100% - 2rem, 72rem);
+  }
+
+  .site-header .container {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Large desktops */
+@media only screen and (min-width: 64em) {
+  .site-header h1 {
+    font-size: 3rem;
+  }
+}
+
+/* Header responsive adjustments */
+@media (max-width: 47.99rem) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .site-header .container {
+    padding-block: var(--space-3);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .site-header h1 {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-3);
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .main-nav a {
+    width: 100%;
+    text-align: center;
+    padding: var(--space-3) var(--space-4);
+  }
+}
+
+@media (min-width: 36rem) and (max-width: 47.99rem) {
+  .site-header .container {
+    gap: var(--space-6);
+  }
+
+  .site-header h1 {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  .site-header .container {
+    padding-block: var(--space-6);
+  }
+}
+
+/* Very small screens - make navigation more compact */
+@media (max-width: 35.99rem) {
+  .main-nav ul {
+    gap: var(--space-1);
+  }
+
+  .main-nav a {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.9rem;
+  }
+
+  .theme-toggle {
+    align-self: center;
+    margin-top: var(--space-2);
+  }
+
+  .toggle-track {
+    width: 50px;
+    height: 26px;
+  }
+
+  .toggle-thumb {
+    width: 22px;
+    height: 22px;
+  }
+
+  .theme-dark-a .toggle-thumb {
+    transform: translateX(26px);
+  }
+}
+
+/* Motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    transition: none;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
+
+/* ==========================================================================
+   11. PRINT STYLES
+   ========================================================================== */
 
 @media print {
   *,
@@ -563,38 +742,47 @@ textarea:focus-visible {
     box-shadow: none !important;
     text-shadow: none !important;
   }
+
   a,
   a:visited {
     text-decoration: underline;
   }
+
   a[href]::after {
     content: " (" attr(href) ")";
   }
+
   abbr[title]::after {
     content: " (" attr(title) ")";
   }
+
   a[href^="#"]::after,
   a[href^="javascript:"]::after {
     content: "";
   }
+
   pre {
     white-space: pre-wrap !important;
   }
+
   pre,
   blockquote {
     border: 1px solid #999;
     page-break-inside: avoid;
   }
+
   tr,
   img {
     page-break-inside: avoid;
   }
+
   p,
   h2,
   h3 {
     orphans: 3;
     widows: 3;
   }
+
   h2,
   h3 {
     page-break-after: avoid;
