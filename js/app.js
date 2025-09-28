@@ -1,52 +1,123 @@
-// ---------- tiny storage helper ----------
+/**
+ * Balance Planner Application
+ * A task management and journaling app with dark/light theme support
+ * 
+ * Features:
+ * - Task management with categories (Personal, School, Work)
+ * - Journal entries with date tracking
+ * - Dark/Light theme switching
+ * - Local storage persistence
+ * - Dashboard with task counts
+ */
+
+// =============================================================================
+// LOCAL STORAGE HELPER
+// =============================================================================
+/**
+ * Simple wrapper around localStorage with JSON serialization and error handling
+ */
 const store = {
+  /**
+   * Get a value from localStorage, with fallback if not found or invalid
+   * @param {string} key - The storage key
+   * @param {any} fallback - Default value if key doesn't exist or is invalid
+   * @returns {any} The stored value or fallback
+   */
   get(key, fallback) {
-    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-    catch { return fallback; }
+    try { 
+      return JSON.parse(localStorage.getItem(key)) ?? fallback; 
+    }
+    catch { 
+      return fallback; // Return fallback if JSON parsing fails
+    }
   },
+  
+  /**
+   * Set a value in localStorage with JSON serialization
+   * @param {string} key - The storage key
+   * @param {any} value - The value to store
+   */
   set(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); }
-    catch { /* ignore quota errors for now */ }
+    try { 
+      localStorage.setItem(key, JSON.stringify(value)); 
+    }
+    catch { 
+      // Ignore quota errors for now - could add user notification later
+    }
   },
 };
 
-// ---------- keys ----------
-const TASKS_KEY = "bp:tasks";
-const THEME_KEY = "bp:theme";
-const JOURNAL_KEY = "bp:journal";
+// =============================================================================
+// STORAGE KEYS
+// =============================================================================
+const TASKS_KEY = "bp:tasks";      // Key for storing task data
+const THEME_KEY = "bp:theme";      // Key for storing theme preference
+const JOURNAL_KEY = "bp:journal";  // Key for storing journal entries
 
-// ---------- load state ----------
-let tasks = store.get(TASKS_KEY, []);
-let journalEntries = store.get(JOURNAL_KEY, []);
-let theme = store.get(THEME_KEY, ""); // '' = light (no class)
+// =============================================================================
+// APPLICATION STATE
+// =============================================================================
+let tasks = store.get(TASKS_KEY, []);           // Array of task objects
+let journalEntries = store.get(JOURNAL_KEY, []); // Array of journal entry objects
+let theme = store.get(THEME_KEY, "");           // Current theme ('' = light, 'theme-dark-a' = dark)
 
-// Apply saved theme (if any)
-if (theme) document.documentElement.classList.add(theme);
+// Apply saved theme on page load
+if (theme) {
+  document.documentElement.classList.add(theme);
+}
 
-// ---------- dom refs ----------
-const listEl = document.getElementById("taskList");
-const formEl = document.getElementById("taskForm");
-const journalFormEl = document.getElementById("journalForm");
-const textEl = document.getElementById("taskText");
-const catEl = document.getElementById("taskCat");
-const toggleEl = document.getElementById("themeToggle");
+// =============================================================================
+// DOM ELEMENT REFERENCES
+// =============================================================================
+// Task-related elements
+const listEl = document.getElementById("taskList");        // Task list container
+const formEl = document.getElementById("taskForm");        // Task input form
+const textEl = document.getElementById("taskText");        // Task text input
+const catEl = document.getElementById("taskCat");          // Task category select
 
-// Dashboard count elements
-const personalCountEl = document.getElementById("personal-count");
-const schoolCountEl = document.getElementById("school-count");
-const workCountEl = document.getElementById("work-count");
-const journalCountEl = document.getElementById("journal-count");
+// Journal-related elements
+const journalFormEl = document.getElementById("journalForm"); // Journal entry form
 
-// ---------- utils ----------
+// UI elements
+const toggleEl = document.getElementById("themeToggle");   // Dark/light theme toggle
+
+// Dashboard count displays
+const personalCountEl = document.getElementById("personal-count"); // Personal tasks count
+const schoolCountEl = document.getElementById("school-count");     // School tasks count
+const workCountEl = document.getElementById("work-count");         // Work tasks count
+const journalCountEl = document.getElementById("journal-count");   // Journal entries count
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
+ * Generate a unique ID for tasks and journal entries
+ * Uses crypto.randomUUID() if available, falls back to timestamp-based ID
+ * @returns {string} Unique identifier
+ */
 const makeId = () =>
   (crypto?.randomUUID?.()) ||
   "t-" + Math.random().toString(36).slice(2) + Date.now();
 
-// simple escape to keep user-entered text safe in HTML
+/**
+ * Escape HTML special characters to prevent XSS attacks
+ * @param {string} s - String to escape
+ * @returns {string} HTML-escaped string
+ */
 const escapeHTML = (s = "") =>
-  s.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
+  s.replace(/[&<>"']/g, m => ({ 
+    "&": "&amp;", 
+    "<": "&lt;", 
+    ">": "&gt;", 
+    "\"": "&quot;", 
+    "'": "&#39;" 
+  }[m]));
 
-// Ensure there is a theme-color meta, return it
+/**
+ * Ensure a theme-color meta tag exists in the document head
+ * @returns {HTMLElement} The theme-color meta element
+ */
 function ensureThemeMeta() {
   let meta = document.querySelector('meta[name="theme-color"]');
   if (!meta) {
@@ -57,7 +128,10 @@ function ensureThemeMeta() {
   return meta;
 }
 
-// Update theme-color to match the CSS --bg variable
+/**
+ * Update the browser's theme-color meta tag to match the current CSS background
+ * This affects the browser UI color on mobile devices
+ */
 function updateThemeColor() {
   const meta = ensureThemeMeta();
   const bg = getComputedStyle(document.documentElement)
@@ -65,53 +139,83 @@ function updateThemeColor() {
     .trim();
   meta.setAttribute("content", bg || "#fafafa");
 }
+
+// Initialize theme color on page load
 updateThemeColor();
 
-// ---------- dashboard updates ----------
+// =============================================================================
+// DASHBOARD FUNCTIONS
+// =============================================================================
+
+/**
+ * Update the task count displays on the dashboard
+ * Shows count of incomplete tasks for each category plus journal entries
+ */
 function updateDashboardCounts() {
+  // Update Personal tasks count
   if (personalCountEl) {
-    const n = tasks.filter(t => t.category === "Personal" && !t.done).length;
-    personalCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
+    const count = tasks.filter(t => t.category === "Personal" && !t.done).length;
+    personalCountEl.textContent = `${count} ${count === 1 ? "task" : "tasks"}`;
   }
+  
+  // Update School tasks count
   if (schoolCountEl) {
-    const n = tasks.filter(t => t.category === "School" && !t.done).length;
-    schoolCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
+    const count = tasks.filter(t => t.category === "School" && !t.done).length;
+    schoolCountEl.textContent = `${count} ${count === 1 ? "task" : "tasks"}`;
   }
+  
+  // Update Work tasks count
   if (workCountEl) {
-    const n = tasks.filter(t => t.category === "Work" && !t.done).length;
-    workCountEl.textContent = `${n} ${n === 1 ? "task" : "tasks"}`;
+    const count = tasks.filter(t => t.category === "Work" && !t.done).length;
+    workCountEl.textContent = `${count} ${count === 1 ? "task" : "tasks"}`;
   }
+  
+  // Update Journal entries count
   if (journalCountEl) {
-    const n = journalEntries.length;
-    journalCountEl.textContent = `${n} ${n === 1 ? "entry" : "entries"}`;
+    const count = journalEntries.length;
+    journalCountEl.textContent = `${count} ${count === 1 ? "entry" : "entries"}`;
   }
 }
 
-// ---------- task rendering ----------
+// =============================================================================
+// RENDERING FUNCTIONS
+// =============================================================================
+
+/**
+ * Render tasks to the task list
+ * @param {string|null} filterCategory - Category to filter by (null = show all or last 5)
+ */
 function renderTasks(filterCategory = null) {
   if (!listEl) return;
 
-  const filtered = filterCategory
-    ? tasks.filter(t => t.category === filterCategory)
-    : tasks.slice(-5); // show last 5 on dashboard
+  // Filter tasks based on category or show last 5 for dashboard
+  const filteredTasks = filterCategory
+    ? tasks.filter(task => task.category === filterCategory)
+    : tasks.slice(-5); // Show last 5 tasks on dashboard
 
-  listEl.innerHTML = filtered.map(t => {
-    const cid = `task-${t.id}`;
+  // Generate HTML for each task
+  listEl.innerHTML = filteredTasks.map(task => {
+    const checkboxId = `task-${task.id}`;
     return `
-      <li data-id="${t.id}" class="task-item ${t.done ? "completed" : ""}">
-        <input id="${cid}" type="checkbox" ${t.done ? "checked" : ""} class="t-done">
-        <label for="${cid}"><strong>[${escapeHTML(t.category)}]</strong> ${escapeHTML(t.text)}</label>
-        <button class="t-remove" type="button" aria-label="Remove task: ${escapeHTML(t.text)}">×</button>
+      <li data-id="${task.id}" class="task-item ${task.done ? "completed" : ""}">
+        <input id="${checkboxId}" type="checkbox" ${task.done ? "checked" : ""} class="t-done">
+        <label for="${checkboxId}">
+          <strong>[${escapeHTML(task.category)}]</strong> ${escapeHTML(task.text)}
+        </label>
+        <button class="t-remove" type="button" aria-label="Remove task: ${escapeHTML(task.text)}">×</button>
       </li>
     `;
   }).join("");
 }
 
-// ---------- journal rendering ----------
+/**
+ * Render journal entries to the journal section
+ */
 function renderJournal() {
   const entriesEl = document.getElementById("journalEntries");
   if (!entriesEl) return;
 
+  // Sort entries by date (newest first) and generate HTML
   entriesEl.innerHTML = journalEntries
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map(entry => `
@@ -123,58 +227,90 @@ function renderJournal() {
     .join("");
 }
 
-// ---------- render everything ----------
+/**
+ * Main render function - updates all UI elements based on current state
+ */
 function render() {
-  // pick category by page
-  const path = window.location.pathname;
+  // Determine which category to filter by based on current page
+  const currentPath = window.location.pathname;
   let filterCategory = null;
-  if (path.includes("personal.html")) filterCategory = "Personal";
-  else if (path.includes("school.html")) filterCategory = "School";
-  else if (path.includes("work.html")) filterCategory = "Work";
+  
+  if (currentPath.includes("personal.html")) {
+    filterCategory = "Personal";
+  } else if (currentPath.includes("school.html")) {
+    filterCategory = "School";
+  } else if (currentPath.includes("work.html")) {
+    filterCategory = "Work";
+  }
 
+  // Render all components
   renderTasks(filterCategory);
   renderJournal();
   updateDashboardCounts();
 }
+
+// Initial render on page load
 render();
 
-// ---------- events ----------
-if (formEl) {
-  formEl.addEventListener("submit", e => {
-    e.preventDefault();
-    const text = (textEl?.value || "").trim();
-    if (!text) return;
+// =============================================================================
+// EVENT HANDLERS
+// =============================================================================
 
-    const task = {
+/**
+ * Handle task form submission - create new task
+ */
+if (formEl) {
+  formEl.addEventListener("submit", event => {
+    event.preventDefault();
+    
+    // Get and validate input
+    const taskText = (textEl?.value || "").trim();
+    if (!taskText) return;
+
+    // Create new task object
+    const newTask = {
       id: makeId(),
-      text,
+      text: taskText,
       category: catEl?.value || "Personal",
       done: false,
       createdAt: Date.now(),
     };
-    tasks.push(task);
+    
+    // Add to tasks array and save
+    tasks.push(newTask);
     store.set(TASKS_KEY, tasks);
 
+    // Clear form and re-render
     if (textEl) textEl.value = "";
     render();
   });
 }
 
+/**
+ * Handle journal form submission - create new journal entry
+ */
 if (journalFormEl) {
-  journalFormEl.addEventListener("submit", e => {
-    e.preventDefault();
-    const date = document.getElementById("journalDate")?.value;
-    const text = document.getElementById("journalText")?.value?.trim();
-    if (!date || !text) return;
+  journalFormEl.addEventListener("submit", event => {
+    event.preventDefault();
+    
+    // Get and validate inputs
+    const entryDate = document.getElementById("journalDate")?.value;
+    const entryText = document.getElementById("journalText")?.value?.trim();
+    if (!entryDate || !entryText) return;
 
-    journalEntries.push({
+    // Create new journal entry
+    const newEntry = {
       id: makeId(),
-      date,
-      text,
+      date: entryDate,
+      text: entryText,
       createdAt: Date.now(),
-    });
+    };
+    
+    // Add to journal entries and save
+    journalEntries.push(newEntry);
     store.set(JOURNAL_KEY, journalEntries);
 
+    // Reset form and set today's date
     journalFormEl.reset();
     const dateEl = document.getElementById("journalDate");
     if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
@@ -183,64 +319,88 @@ if (journalFormEl) {
   });
 }
 
-// delegate remove clicks
+/**
+ * Handle task removal - delegate clicks on remove buttons
+ */
 if (listEl) {
-  listEl.addEventListener("click", e => {
-    const btn = e.target.closest(".t-remove");
-    if (!btn) return;
-    const li = btn.closest("li");
-    if (!li) return;
-    const id = li.getAttribute("data-id");
-    tasks = tasks.filter(t => t.id !== id);
+  listEl.addEventListener("click", event => {
+    const removeButton = event.target.closest(".t-remove");
+    if (!removeButton) return;
+    
+    const taskListItem = removeButton.closest("li");
+    if (!taskListItem) return;
+    
+    // Remove task from array and save
+    const taskId = taskListItem.getAttribute("data-id");
+    tasks = tasks.filter(task => task.id !== taskId);
     store.set(TASKS_KEY, tasks);
     render();
   });
-  // use change for checkboxes
-  listEl.addEventListener("change", e => {
-    if (!e.target.classList.contains("t-done")) return;
-    const li = e.target.closest("li");
-    if (!li) return;
-    const id = li.getAttribute("data-id");
-    const checked = e.target.checked;
-    tasks = tasks.map(t => (t.id === id ? { ...t, done: checked } : t));
+  
+  /**
+   * Handle task completion toggle - delegate checkbox changes
+   */
+  listEl.addEventListener("change", event => {
+    if (!event.target.classList.contains("t-done")) return;
+    
+    const taskListItem = event.target.closest("li");
+    if (!taskListItem) return;
+    
+    // Update task completion status and save
+    const taskId = taskListItem.getAttribute("data-id");
+    const isCompleted = event.target.checked;
+    tasks = tasks.map(task => 
+      task.id === taskId ? { ...task, done: isCompleted } : task
+    );
     store.set(TASKS_KEY, tasks);
     render();
   });
 }
 
-// ---------- theme toggle (single listener + ARIA sync) ----------
+/**
+ * Handle theme toggle - switch between light and dark themes
+ */
 if (toggleEl) {
-  const initialDark = document.documentElement.classList.contains("theme-dark-a");
-  toggleEl.setAttribute("aria-pressed", initialDark ? "true" : "false");
+  // Set initial ARIA state
+  const isInitiallyDark = document.documentElement.classList.contains("theme-dark-a");
+  toggleEl.setAttribute("aria-pressed", isInitiallyDark ? "true" : "false");
 
   toggleEl.addEventListener("click", () => {
-    const nowDark = document.documentElement.classList.toggle("theme-dark-a");
-    store.set(THEME_KEY, nowDark ? "theme-dark-a" : "");
-    toggleEl.setAttribute("aria-pressed", nowDark ? "true" : "false");
-    updateThemeColor();
+    // Toggle theme class and get new state
+    const isNowDark = document.documentElement.classList.toggle("theme-dark-a");
+    
+    // Save theme preference and update UI
+    store.set(THEME_KEY, isNowDark ? "theme-dark-a" : "");
+    toggleEl.setAttribute("aria-pressed", isNowDark ? "true" : "false");
+    updateThemeColor(); // Update browser theme color
   });
 }
 
-// ---------- nav highlighting across pages ----------
-document.querySelectorAll(".main-nav a").forEach(a => {
-  const href = a.getAttribute("href");
-  const here = location.pathname.split("/").pop() || "index.html";
-  const isCurrent = href === here;
-  a.classList.toggle("active", isCurrent);
-  a.toggleAttribute("aria-current", isCurrent);
+/**
+ * Handle navigation highlighting - mark current page in navigation
+ */
+document.querySelectorAll(".main-nav a").forEach(link => {
+  const href = link.getAttribute("href");
+  const currentPage = location.pathname.split("/").pop() || "index.html";
+  const isCurrentPage = href === currentPage;
+  
+  link.classList.toggle("active", isCurrentPage);
+  link.toggleAttribute("aria-current", isCurrentPage);
 });
 
-// Clear all data functionality
+/**
+ * Handle clear all data functionality
+ */
 const clearDataBtn = document.getElementById('clearDataBtn');
 if (clearDataBtn) {
   clearDataBtn.addEventListener('click', () => {
     if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
-      // Clear localStorage
+      // Clear all localStorage data
       localStorage.removeItem('bp:tasks');
       localStorage.removeItem('bp:journal');
       localStorage.removeItem('bp:theme');
       
-      // Reset variables
+      // Reset application state
       tasks = [];
       journalEntries = [];
       theme = '';
@@ -248,7 +408,7 @@ if (clearDataBtn) {
       // Remove theme class
       document.documentElement.classList.remove('theme-dark-a');
       
-      // Re-render
+      // Re-render with empty state
       render();
       
       // Show success message
@@ -257,9 +417,25 @@ if (clearDataBtn) {
   });
 }
 
-// Set today's date as default for journal
-const dateEl = document.getElementById("journalDate");
-if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
+// =============================================================================
+// INITIALIZATION
+// =============================================================================
 
-// Optional: expose for quick console debugging
-window.BP = { tasks, render, store };
+/**
+ * Set today's date as default for journal date input
+ */
+const dateEl = document.getElementById("journalDate");
+if (dateEl) {
+  dateEl.value = new Date().toISOString().split("T")[0];
+}
+
+/**
+ * Expose application state and functions for debugging
+ * Available in browser console as window.BP
+ */
+window.BP = { 
+  tasks,           // Current tasks array
+  journalEntries,  // Current journal entries array
+  render,          // Main render function
+  store            // Storage helper
+};
