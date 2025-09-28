@@ -264,6 +264,125 @@ function render() {
 render();
 
 // =============================================================================
+// DUMMY DATA LOADING
+// =============================================================================
+
+/**
+ * Load dummy data for demonstration purposes
+ * This function creates sample tasks and journal entries to show functionality
+ */
+function loadDummyData() {
+  // Only load dummy data if no existing data is found
+  if (tasks.length === 0 && journalEntries.length === 0) {
+    // Create dummy tasks (3 for each category)
+    const dummyTasks = [
+      // Personal tasks
+      {
+        id: makeId(),
+        text: "Grocery shopping for the week",
+        category: "Personal",
+        done: false,
+        createdAt: Date.now() - 86400000 // 1 day ago
+      },
+      {
+        id: makeId(),
+        text: "Call mom for her birthday",
+        category: "Personal", 
+        done: true,
+        createdAt: Date.now() - 172800000 // 2 days ago
+      },
+      {
+        id: makeId(),
+        text: "Schedule dentist appointment",
+        category: "Personal",
+        done: false,
+        createdAt: Date.now() - 259200000 // 3 days ago
+      },
+      // School tasks
+      {
+        id: makeId(),
+        text: "Complete Web Design project",
+        category: "School",
+        done: false,
+        createdAt: Date.now() - 345600000 // 4 days ago
+      },
+      {
+        id: makeId(),
+        text: "Study for midterm exam",
+        category: "School",
+        done: false,
+        createdAt: Date.now() - 432000000 // 5 days ago
+      },
+      {
+        id: makeId(),
+        text: "Submit homework assignment",
+        category: "School",
+        done: true,
+        createdAt: Date.now() - 518400000 // 6 days ago
+      },
+      // Work tasks
+      {
+        id: makeId(),
+        text: "Prepare quarterly report",
+        category: "Work",
+        done: false,
+        createdAt: Date.now() - 604800000 // 7 days ago
+      },
+      {
+        id: makeId(),
+        text: "Team meeting at 2 PM",
+        category: "Work",
+        done: true,
+        createdAt: Date.now() - 691200000 // 8 days ago
+      },
+      {
+        id: makeId(),
+        text: "Update project documentation",
+        category: "Work",
+        done: false,
+        createdAt: Date.now() - 777600000 // 9 days ago
+      }
+    ];
+
+    // Create dummy journal entries (3 entries)
+    const dummyJournalEntries = [
+      {
+        id: makeId(),
+        date: new Date(Date.now() - 86400000).toISOString().split('T')[0], // Yesterday
+        text: "Had a productive day at work today. Finished the presentation for tomorrow's meeting and felt really confident about it. Also managed to squeeze in a quick workout during lunch break, which felt great.",
+        createdAt: Date.now() - 86400000
+      },
+      {
+        id: makeId(),
+        date: new Date(Date.now() - 172800000).toISOString().split('T')[0], // 2 days ago
+        text: "Struggled with the web design project today. The CSS grid layout isn't cooperating the way I want it to. Need to spend more time on it tomorrow. On the bright side, had a nice dinner with friends which helped me unwind.",
+        createdAt: Date.now() - 172800000
+      },
+      {
+        id: makeId(),
+        date: new Date(Date.now() - 259200000).toISOString().split('T')[0], // 3 days ago
+        text: "Weekend was relaxing but also productive. Caught up on some personal reading and started planning my garden for spring. Feeling motivated to tackle the upcoming week's challenges.",
+        createdAt: Date.now() - 259200000
+      }
+    ];
+
+    // Load the dummy data
+    tasks = dummyTasks;
+    journalEntries = dummyJournalEntries;
+    
+    // Save to localStorage
+    store.set(TASKS_KEY, tasks);
+    store.set(JOURNAL_KEY, journalEntries);
+    
+    // Re-render to show the new data
+    render();
+  }
+}
+
+// Load dummy data on page load if no existing data
+loadDummyData();
+
+// =============================================================================
 // EVENT HANDLERS
 // =============================================================================
 

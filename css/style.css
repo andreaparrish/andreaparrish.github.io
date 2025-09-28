@@ -7,13 +7,14 @@
  * 2. Design System (Variables & Tokens)
  * 3. Typography & Base Elements
  * 4. Layout & Structure
- * 5. Navigation Components
- * 6. Form Components & Buttons
- * 7. Dashboard & Content Components
- * 8. Theme Toggle Component
- * 9. Utility Classes & Accessibility
- * 10. Responsive Design
- * 11. Print Styles
+ * 5. 12-Column Grid System
+ * 6. Navigation Components
+ * 7. Form Components & Buttons
+ * 8. Dashboard & Content Components
+ * 9. Theme Toggle Component
+ * 10. Utility Classes & Accessibility
+ * 11. Responsive Design
+ * 12. Print Styles
  */
 
 /* ==========================================================================
@@ -29,6 +30,8 @@
 html {
   font-size: 1em; /* base 16px */
   line-height: 1.5; /* better readability */
+  margin: 0;
+  padding: 0;
 }
 
 audio,
@@ -77,6 +80,7 @@ textarea {
   --space-4: 1rem; /* 16px */
   --space-6: 1.5rem; /* 24px */
   --space-8: 2rem; /* 32px */
+  --space-12: 3rem; /* 48px */
 
   /* Effects */
   --radius: 12px;
@@ -119,10 +123,12 @@ body {
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.2s linear, color 0.2s linear;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  min-height: 100dvh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -139,7 +145,7 @@ h1 {
   line-height: 1.1;
   letter-spacing: normal;
   text-transform: none;
-  color: var(--text);
+  color: var(--accent);
   margin: 0;
 }
 
@@ -217,7 +223,6 @@ hr {
   z-index: 1;
 }
 
-.site-header .container,
 .site-footer .container,
 main.container {
   padding-block: var(--space-4);
@@ -230,6 +235,7 @@ main.container {
   justify-content: space-between;
   gap: var(--space-4);
   flex-wrap: wrap;
+  padding-block: var(--space-4);
 }
 
 /* Footer content layout */
@@ -249,17 +255,97 @@ main.container {
   padding: var(--space-4);
 }
 
-/* Simple grid helper */
-@media (min-width: 48rem) {
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
+/* ==========================================================================
+   5. 12-COLUMN GRID SYSTEM (Bootstrap-style)
+   ========================================================================== */
+
+/* Container for grid system */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  row-gap: var(--space-4);
+  column-gap: var(--space-4);
+  width: 100%;
+}
+
+/* Grid column classes */
+.col-1 {
+  grid-column: span 1;
+}
+.col-2 {
+  grid-column: span 2;
+}
+.col-3 {
+  grid-column: span 3;
+}
+.col-4 {
+  grid-column: span 4;
+}
+.col-5 {
+  grid-column: span 5;
+}
+.col-6 {
+  grid-column: span 6;
+}
+.col-7 {
+  grid-column: span 7;
+}
+.col-8 {
+  grid-column: span 8;
+}
+.col-9 {
+  grid-column: span 9;
+}
+.col-10 {
+  grid-column: span 10;
+}
+.col-11 {
+  grid-column: span 11;
+}
+.col-12 {
+  grid-column: span 12;
+}
+
+/* Offset classes for centering */
+.offset-1 {
+  grid-column-start: 2;
+}
+.offset-2 {
+  grid-column-start: 3;
+}
+.offset-3 {
+  grid-column-start: 4;
+}
+.offset-4 {
+  grid-column-start: 5;
+}
+.offset-5 {
+  grid-column-start: 6;
+}
+.offset-6 {
+  grid-column-start: 7;
+}
+
+/* Responsive behavior - stack on mobile */
+@media (max-width: 47.99rem) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    row-gap: var(--space-6); /* Maintain section spacing on mobile */
+  }
+
+  .offset-1,
+  .offset-2,
+  .offset-3,
+  .offset-4,
+  .offset-5,
+  .offset-6 {
+    grid-column-start: 1;
   }
 }
 
 /* ==========================================================================
-   5. NAVIGATION COMPONENTS
+   6. NAVIGATION COMPONENTS
    ========================================================================== */
 
 .main-nav ul {
@@ -295,7 +381,7 @@ main.container {
 }
 
 /* ==========================================================================
-   6. FORM COMPONENTS & BUTTONS
+   7. FORM COMPONENTS & BUTTONS
    ========================================================================== */
 
 /* Form inputs */
@@ -308,6 +394,19 @@ textarea {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
+  box-sizing: border-box;
+}
+
+/* Single-line form elements */
+input,
+select {
+  height: 2.2rem; /* Consistent height for single-line form elements */
+}
+
+/* Textarea should have different height for multi-line content */
+textarea {
+  min-height: 2.2rem;
+  height: auto;
 }
 
 input::placeholder,
@@ -330,8 +429,10 @@ textarea:focus-visible {
   color: var(--accent-contrast);
   border: 0;
   border-radius: 0.6rem;
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 1rem;
+  height: 2.2rem; /* Match form input height */
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .btn:focus-visible {
@@ -383,19 +484,10 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
-   7. DASHBOARD & CONTENT COMPONENTS
+   8. DASHBOARD & CONTENT COMPONENTS
    ========================================================================== */
 
-.dashboard-overview h2 {
-  margin-bottom: var(--space-4);
-}
-
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-}
+/* Overview Cards */
 
 .overview-card {
   background: var(--surface);
@@ -403,6 +495,34 @@ textarea:focus-visible {
   border-radius: var(--radius);
   padding: var(--space-4);
   text-align: center;
+}
+
+/* Quick Add Form */
+.quick-add form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.quick-add input {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.quick-add .form-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+.quick-add select {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.quick-add .btn {
+  flex-shrink: 0;
+  margin-top: 0;
 }
 
 .overview-card h3 {
@@ -417,10 +537,9 @@ textarea:focus-visible {
   font-weight: 700;
 }
 
-/* Tasks */
+/* Task Management */
 #taskList {
   list-style: none;
-  margin: var(--space-4) 0 0;
   padding: 0;
   display: grid;
   gap: var(--space-2);
@@ -438,11 +557,10 @@ textarea:focus-visible {
   text-decoration: line-through;
 }
 
-/* Journal */
+/* Journal Management */
 #journalForm {
   display: grid;
   gap: var(--space-3);
-  margin-bottom: var(--space-6);
 }
 
 #journalForm label {
@@ -460,7 +578,13 @@ textarea:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: var(--space-3);
-  margin-bottom: var(--space-3);
+}
+
+/* Journal Entries Display */
+#journalEntries {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 
 .journal-entry h4 {
@@ -474,8 +598,24 @@ textarea:focus-visible {
   white-space: pre-wrap;
 }
 
+/* Overview Cards Responsive Behavior */
+
+/* Medium screens: 2x2 layout */
+@media (max-width: 48rem) {
+  .overview-grid .overview-card {
+    grid-column: span 6; /* 2 cards per row */
+  }
+}
+
+/* Extra small screens: 1x4 layout (1 card per row) */
+@media (max-width: 10rem) {
+  .overview-grid .overview-card {
+    grid-column: span 12; /* 1 card per row */
+  }
+}
+
 /* ==========================================================================
-   8. THEME TOGGLE COMPONENT
+   9. THEME TOGGLE COMPONENT
    ========================================================================== */
 
 .theme-toggle {
@@ -531,7 +671,7 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
-   9. UTILITY CLASSES & ACCESSIBILITY
+   10. UTILITY CLASSES & ACCESSIBILITY
    ========================================================================== */
 
 /* Visibility utilities */
@@ -585,54 +725,40 @@ textarea:focus-visible {
 }
 
 /* JS dependency */
-.no-js .requires-js {
-  display: none;
-}
-
 .no-js-msg {
-  background: #fff3cd;
-  color: #664d03;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
   padding: 0.75rem;
   border-radius: 0.5rem;
 }
 
 /* ==========================================================================
-   10. RESPONSIVE DESIGN
+   11. RESPONSIVE DESIGN
    ========================================================================== */
 
-/* Small mobile devices (320px and up) */
-@media only screen and (min-width: 20em) {
+/* Mobile devices (320px and up) */
+@media (min-width: 20em) {
   .container {
     width: min(100% - 1rem, 72rem);
   }
 }
 
 /* Large mobile devices and small tablets */
-@media only screen and (min-width: 35em) {
+@media (min-width: 35em) {
   .container {
     width: min(100% - 1.5rem, 72rem);
   }
 }
 
 /* Tablets and small desktops */
-@media only screen and (min-width: 48em) {
-  .container {
-    width: min(100% - 2rem, 72rem);
-  }
-
+@media (min-width: 48em) {
   .site-header .container {
     flex-wrap: nowrap;
   }
 }
 
-/* Large desktops */
-@media only screen and (min-width: 64em) {
-  .site-header h1 {
-    font-size: 3rem;
-  }
-}
-
-/* Header responsive adjustments */
+/* Mobile Header Adjustments */
 @media (max-width: 47.99rem) {
   h1 {
     font-size: 2rem;
@@ -670,6 +796,14 @@ textarea:focus-visible {
   }
 }
 
+/* Large desktops */
+@media (min-width: 64em) {
+  .site-header h1 {
+    font-size: 3rem;
+  }
+}
+
+/* Medium Screen Adjustments */
 @media (min-width: 36rem) and (max-width: 47.99rem) {
   .site-header .container {
     gap: var(--space-6);
@@ -680,13 +814,14 @@ textarea:focus-visible {
   }
 }
 
+/* Desktop Adjustments */
 @media (min-width: 48rem) {
   .site-header .container {
     padding-block: var(--space-6);
   }
 }
 
-/* Very small screens - make navigation more compact */
+/* Very Small Screens - Compact Navigation */
 @media (max-width: 35.99rem) {
   .main-nav ul {
     gap: var(--space-1);
@@ -717,20 +852,22 @@ textarea:focus-visible {
   }
 }
 
-/* Motion preferences */
+/* Accessibility - Motion Preferences */
 @media (prefers-reduced-motion: reduce) {
   html,
   body {
     transition: none;
   }
 
-  * {
+  *,
+  *::before,
+  *::after {
     transition: none !important;
   }
 }
 
 /* ==========================================================================
-   11. PRINT STYLES
+   12. PRINT STYLES
    ========================================================================== */
 
 @media print {

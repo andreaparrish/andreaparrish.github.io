@@ -65,23 +65,33 @@
     </header>
 
     <main id="main" class="container">
-      <section class="page-header">
-        <h2>Work Tasks</h2>
-        <p>Manage your professional commitments here. Use the task list for projects, meetings, and deliverables. Checking items off keeps you focused on progress, not just busy work.</p>
-      </section>
+      <!-- Grid Container for main content -->
+      <div class="grid-container">
+        <!-- Page Header - 12 columns -->
+        <section class="page-header col-12">
+          <h2>Work Tasks</h2>
+          <p>Manage your professional commitments here. Use the task list for projects, meetings, and deliverables. Checking items off keeps you focused on progress, not just busy work.</p>
+        </section>
 
-      <section class="task-section">
-        <form id="taskForm">
-          <label for="taskText" class="visually-hidden">Task</label>
-          <input id="taskText" placeholder="New work task…" required />
+        <!-- Task Form - 4 columns (left side) -->
+        <section class="task-form col-4">
+          <h2>Add New Task</h2>
+          <form id="taskForm">
+            <label for="taskText" class="visually-hidden">Task</label>
+            <input id="taskText" placeholder="New work task…" required />
 
-          <input type="hidden" id="taskCat" value="Work" />
+            <input type="hidden" id="taskCat" value="Work" />
 
-          <button class="btn" type="submit">Add</button>
-        </form>
+            <button class="btn" type="submit">Add</button>
+          </form>
+        </section>
 
-        <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
-      </section>
+        <!-- Recent Tasks - 8 columns (right side) -->
+        <section class="recent-tasks col-8">
+          <h2>Recent Tasks</h2>
+          <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
+        </section>
+      </div>
     </main>
 
     <footer class="site-footer">

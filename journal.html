@@ -57,24 +57,29 @@
     </header>
 
     <main id="main" class="container">
-      <section class="page-header">
-        <h2>Daily Journal</h2>
-        <p>Use the journal to jot down notes, reflections, or daily summaries. Writing things out can help reduce stress and highlight what’s working well. Your entries are organized by date for easy review.</p>
-      </section>
+      <!-- Grid Container for main content -->
+      <div class="grid-container">
+        <!-- Page Header - 12 columns -->
+        <section class="page-header col-12">
+          <h2>Daily Journal</h2>
+          <p>Use the journal to jot down notes, reflections, or daily summaries. Writing things out can help reduce stress and highlight what's working well. Your entries are organized by date for easy review.</p>
+        </section>
 
-      <section class="journal-section">
-        <form id="journalForm">
-          <label for="journalDate">Date</label>
-          <input id="journalDate" type="date" required />
+        <!-- Journal Section - 6 columns, centered -->
+        <section class="journal-section col-12">
+          <form id="journalForm">
+            <label for="journalDate">Date</label>
+            <input id="journalDate" type="date" required />
 
-          <label for="journalText">Entry</label>
-          <textarea id="journalText" placeholder="What's on your mind today?" rows="4" required></textarea>
+            <label for="journalText">Entry</label>
+            <textarea id="journalText" placeholder="What's on your mind today?" rows="4" required></textarea>
 
-          <button class="btn" type="submit">Save Entry</button>
-        </form>
+            <button class="btn" type="submit">Save Entry</button>
+          </form>
 
-        <div id="journalEntries" aria-live="polite"></div>
-      </section>
+          <div id="journalEntries" aria-live="polite"></div>
+        </section>
+      </div>
     </main>
 
     <footer class="site-footer">

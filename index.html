@@ -73,7 +73,8 @@
 
     <!-- Main content (centered by .container) -->
     <main id="main" class="container">
-      <section class="page-header">
+      <!-- Page Header - 12 columns -->
+      <section class="page-header col-12">
         <h2>Dashboard</h2>
         <p>
           Welcome to Balance Planner — your simple hub for keeping life on track. Whether you're juggling work, school,
@@ -81,58 +82,63 @@
         </p>
       </section>
 
-      <!-- Dashboard Overview Cards -->
-      <section class="dashboard-overview">
-        <h2>Today's Overview</h2>
-        <div class="overview-grid">
-          <div class="overview-card">
-            <h3>Personal</h3>
-            <p class="task-count" id="personal-count">0 tasks</p>
+      <!-- Grid Container for main content -->
+      <div class="grid-container">
+        <!-- Dashboard Overview - 8 columns -->
+        <section class="dashboard-overview col-8">
+          <h2>Today's Overview</h2>
+          <div class="overview-grid grid-container">
+            <div class="overview-card col-3">
+              <h3>Personal</h3>
+              <p class="task-count" id="personal-count">0 tasks</p>
+            </div>
+            <div class="overview-card col-3">
+              <h3>School</h3>
+              <p class="task-count" id="school-count">0 tasks</p>
+            </div>
+            <div class="overview-card col-3">
+              <h3>Work</h3>
+              <p class="task-count" id="work-count">0 tasks</p>
+            </div>
+            <div class="overview-card col-3">
+              <h3>Journal</h3>
+              <p class="journal-count" id="journal-count">0 entries</p>
+            </div>
           </div>
-          <div class="overview-card">
-            <h3>School</h3>
-            <p class="task-count" id="school-count">0 tasks</p>
-          </div>
-          <div class="overview-card">
-            <h3>Work</h3>
-            <p class="task-count" id="work-count">0 tasks</p>
-          </div>
-          <div class="overview-card">
-            <h3>Journal</h3>
-            <p class="journal-count" id="journal-count">0 entries</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Quick Add Task -->
-      <section class="quick-add">
-        <h2>Quick Add Task</h2>
-        <form id="taskForm">
-          <label for="taskText" class="visually-hidden">Task</label>
-          <input id="taskText" placeholder="New task…" required />
+        <!-- Quick Add Task - 4 columns (right side of overview) -->
+        <section class="quick-add col-4">
+          <h2>Quick Add Task</h2>
+          <form id="taskForm">
+            <label for="taskText" class="visually-hidden">Task</label>
+            <input id="taskText" placeholder="New task…" required />
 
-          <label for="taskCat" class="visually-hidden">Category</label>
-          <select id="taskCat">
-            <option value="Personal">Personal</option>
-            <option value="School">School</option>
-            <option value="Work">Work</option>
-          </select>
+            <div class="form-row">
+              <label for="taskCat" class="visually-hidden">Category</label>
+              <select id="taskCat">
+                <option value="Personal">Personal</option>
+                <option value="School">School</option>
+                <option value="Work">Work</option>
+              </select>
 
-          <button class="btn" type="submit">Add</button>
-        </form>
-      </section>
+              <button class="btn" type="submit">Add</button>
+            </div>
+          </form>
+        </section>
 
-      <!-- Recent Tasks -->
-      <section class="recent-tasks">
-        <h2>Recent Tasks</h2>
-        <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
-      </section>
+        <!-- Recent Tasks - 6 columns (left side) -->
+        <section class="recent-tasks col-6">
+          <h2>Recent Tasks</h2>
+          <ul id="taskList" aria-live="polite" aria-relevant="additions removals text"></ul>
+        </section>
 
-      <!-- Recent Journal Entries -->
-      <section class="recent-journal">
-        <h2>Recent Journal Entries</h2>
-        <div id="journalEntries" aria-live="polite"></div>
-      </section>
+        <!-- Recent Journal Entries - 6 columns (right side) -->
+        <section class="recent-journal col-6">
+          <h2>Recent Journal Entries</h2>
+          <div id="journalEntries" aria-live="polite"></div>
+        </section>
+      </div>
 
     </main>
 
