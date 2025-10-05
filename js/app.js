@@ -569,3 +569,161 @@ window.BP = {
   render,          // Main render function
   store            // Storage helper
 };
+
+// =============================================================================
+// WISDOM QUOTE COMPONENT
+// =============================================================================
+
+/**
+ * Pool of wisdom quotes to rotate through
+ * Each quote object contains text and author
+ */
+const QUOTES = [
+  {
+    text: "When you have faults, do not fear to abandon them.",
+    author: "Confucius",
+  },
+  {
+    text: "The superior man is modest in his speech, but exceeds in his actions.",
+    author: "Confucius",
+  },
+  {
+    text: "A journey of a thousand miles begins beneath one's feet.",
+    author: "Lao Tzu",
+  },
+  {
+    text: "Act on it before it comes into being; order it before there is disorder.",
+    author: "Lao Tzu",
+  },
+  {
+    text: "Be careful at the end as at the beginning, and there will be no ruined enterprises.",
+    author: "Lao Tzu",
+  },
+  {
+    text: "It is not that we have a short time to live, but that we waste much of it.",
+    author: "Seneca",
+  },
+  {
+    text: "Well done is better than well said.",
+    author: "Benjamin Franklin",
+  },
+  {
+    text: "Waste no more time arguing what a good man should be. Be one.",
+    author: "Marcus Aurelius",
+  },
+  {
+    text: "The happiness of your life depends upon the quality of your thoughts.",
+    author: "Marcus Aurelius",
+  },
+  {
+    text: "It does not matter how slowly you go as long as you do not stop.",
+    author: "Confucius",
+  },
+  {
+    text: "He who conquers himself is the mightiest warrior.",
+    author: "Confucius",
+  },
+  {
+    text: "He who is brave is free.",
+    author: "Seneca",
+  },
+  {
+    text: "Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.",
+    author: "Buddha",
+  },
+  {
+    text: "Order your soul. Reduce your wants. Live in harmony with nature.",
+    author: "Epicurus",
+  }
+];
+
+/**
+ * Fisher-Yates shuffle algorithm to randomize array order
+ * @param {Array} array - Array to shuffle
+ * @returns {Array} Shuffled copy of the array
+ */
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+/**
+ * Get the next quote to display, with non-repeating rotation logic
+ * @returns {Object} Quote object with text and author
+ */
+function getNextQuote() {
+  // Get current order and position from localStorage
+  let quoteOrder = store.get("bp:quoteOrder", null);
+  let qpos = store.get("bp:qpos", 0);
+
+  // If no order exists or we've exhausted all quotes, create a new shuffled order
+  if (!quoteOrder || !Array.isArray(quoteOrder) || qpos >= quoteOrder.length) {
+    quoteOrder = shuffleArray(Array.from({ length: QUOTES.length }, (_, i) => i));
+    store.set("bp:quoteOrder", quoteOrder);
+    qpos = 0;
+  }
+
+  // Get the current quote
+  const quoteIndex = quoteOrder[qpos];
+  const quote = QUOTES[quoteIndex];
+
+  // Increment position and save to localStorage
+  store.set("bp:qpos", qpos + 1);
+
+  return quote;
+}
+
+/**
+ * Inject the wisdom quote component into the page
+ * Inserts before <footer> if found, otherwise appends to <main>
+ */
+function injectQuoteComponent() {
+  // Get the next quote
+  const quote = getNextQuote();
+
+  // Create the quote HTML structure
+  const quoteAside = document.createElement("aside");
+  quoteAside.className = "site-quote";
+  quoteAside.setAttribute("aria-live", "polite");
+
+  const container = document.createElement("div");
+  container.className = "container";
+
+  const figure = document.createElement("figure");
+  figure.style.margin = "0";
+
+  const blockquote = document.createElement("blockquote");
+  blockquote.id = "quoteText";
+  blockquote.textContent = quote.text;
+
+  const figcaption = document.createElement("figcaption");
+  figcaption.id = "quoteBy";
+  figcaption.textContent = `— ${quote.author}`;
+
+  // Assemble the structure
+  figure.appendChild(blockquote);
+  figure.appendChild(figcaption);
+  container.appendChild(figure);
+  quoteAside.appendChild(container);
+
+  // Find insertion point: before footer or append to main
+  const footer = document.querySelector("footer");
+  if (footer) {
+    footer.parentNode.insertBefore(quoteAside, footer);
+  } else {
+    const main = document.querySelector("main");
+    if (main) {
+      main.appendChild(quoteAside);
+    } else {
+      // Fallback: append to body
+      document.body.appendChild(quoteAside);
+    }
+  }
+}
+
+// Initialize the quote component on page load
+injectQuoteComponent();

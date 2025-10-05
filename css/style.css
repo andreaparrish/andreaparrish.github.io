@@ -925,3 +925,23 @@ textarea:focus-visible {
     page-break-after: avoid;
   }
 }
+
+/* ==========================================================================
+   13. WISDOM QUOTE COMPONENT
+   ========================================================================== */
+
+.site-quote {
+  color: var(--muted-text);
+  font-style: italic;
+  margin-block: var(--space-6);
+  text-align: center;
+}
+
+.site-quote blockquote {
+  margin: 0 0 var(--space-2) 0;
+}
+
+.site-quote figcaption {
+  font-style: normal;
+  font-size: 0.95rem;
+}
