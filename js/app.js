@@ -6,19 +6,17 @@
 // localStorage helper
 const store = {
   get(key, fallback) {
-    try { 
-      return JSON.parse(localStorage.getItem(key)) ?? fallback; 
-    }
-    catch { 
+    try {
+      return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
       return fallback;
     }
   },
-  
+
   set(key, value) {
-    try { 
-      localStorage.setItem(key, JSON.stringify(value)); 
-    }
-    catch { 
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
       // Silently fail if quota exceeded
     }
   },
@@ -57,17 +55,21 @@ const journalCountEl = document.getElementById("journal-count");
 
 // Utility functions
 const makeId = () =>
-  (crypto?.randomUUID?.()) ||
+  crypto?.randomUUID?.() ||
   "t-" + Math.random().toString(36).slice(2) + Date.now();
 
 const escapeHTML = (s = "") =>
-  s.replace(/[&<>"']/g, m => ({ 
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    "\"": "&quot;",
-    "'": "&#39;"
-  }[m]));
+  s.replace(
+    /[&<>"']/g,
+    (m) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[m])
+  );
 
 function ensureThemeMeta() {
   let meta = document.querySelector('meta[name="theme-color"]');
@@ -94,19 +96,23 @@ function updateDashboardCounts() {
   const categoryConfig = [
     { element: personalCountEl, category: "Personal", unit: "task" },
     { element: schoolCountEl, category: "School", unit: "task" },
-    { element: workCountEl, category: "Work", unit: "task" }
+    { element: workCountEl, category: "Work", unit: "task" },
   ];
-  
+
   categoryConfig.forEach(({ element, category, unit }) => {
     if (element) {
-      const count = tasks.filter(t => t.category === category && !t.done).length;
+      const count = tasks.filter(
+        (t) => t.category === category && !t.done
+      ).length;
       element.textContent = `${count} ${count === 1 ? unit : unit + "s"}`;
     }
   });
-  
+
   if (journalCountEl) {
     const count = journalEntries.length;
-    journalCountEl.textContent = `${count} ${count === 1 ? "entry" : "entries"}`;
+    journalCountEl.textContent = `${count} ${
+      count === 1 ? "entry" : "entries"
+    }`;
   }
 }
 
@@ -115,22 +121,32 @@ function renderTasks(filterCategory = null) {
   if (!listEl) return;
 
   const filteredTasks = filterCategory
-    ? tasks.filter(task => task.category === filterCategory)
+    ? tasks.filter((task) => task.category === filterCategory)
     : tasks.slice(-DASHBOARD_TASKS_LIMIT);
 
-  listEl.innerHTML = filteredTasks.map(task => {
-    const checkboxId = `task-${task.id}`;
-    
-    return `
-      <li data-id="${task.id}" class="task-item ${task.done ? "completed" : ""}">
-        <input id="${checkboxId}" type="checkbox" ${task.done ? "checked" : ""} class="t-done">
+  listEl.innerHTML = filteredTasks
+    .map((task) => {
+      const checkboxId = `task-${task.id}`;
+
+      return `
+      <li data-id="${task.id}" class="task-item ${
+        task.done ? "completed" : ""
+      }">
+        <input id="${checkboxId}" type="checkbox" ${
+        task.done ? "checked" : ""
+      } class="t-done">
         <label for="${checkboxId}">
-          <strong>[${escapeHTML(task.category)}]</strong> ${escapeHTML(task.text)}
+          <strong>[${escapeHTML(task.category)}]</strong> ${escapeHTML(
+        task.text
+      )}
         </label>
-        <button class="t-remove" type="button" aria-label="Remove task: ${escapeHTML(task.text)}">×</button>
+        <button class="t-remove" type="button" aria-label="Remove task: ${escapeHTML(
+          task.text
+        )}">×</button>
       </li>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 // Render journal entries
@@ -138,21 +154,23 @@ function renderJournal(limitToRecent = false) {
   const entriesEl = document.getElementById("journalEntries");
   if (!entriesEl) return;
 
-  const sortedEntries = [...journalEntries].sort((a, b) => 
-    new Date(b.date) - new Date(a.date)
+  const sortedEntries = [...journalEntries].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
   );
-  
-  const entriesToShow = limitToRecent 
+
+  const entriesToShow = limitToRecent
     ? sortedEntries.slice(0, DASHBOARD_JOURNAL_LIMIT)
     : sortedEntries;
 
   entriesEl.innerHTML = entriesToShow
-    .map(entry => `
+    .map(
+      (entry) => `
       <div class="journal-entry">
         <h4>${new Date(entry.date).toLocaleDateString()}</h4>
         <p>${escapeHTML(entry.text)}</p>
       </div>
-    `)
+    `
+    )
     .join("");
 }
 
@@ -161,7 +179,7 @@ function render() {
   const currentPath = window.location.pathname;
   let filterCategory = null;
   let limitJournalToRecent = false;
-  
+
   if (currentPath.includes("personal.html")) {
     filterCategory = "Personal";
   } else if (currentPath.includes("school.html")) {
@@ -188,93 +206,93 @@ function loadDummyData() {
         text: "Grocery shopping for the week",
         category: "Personal",
         done: false,
-        createdAt: Date.now() - 86400000
+        createdAt: Date.now() - 86400000,
       },
       {
         id: makeId(),
         text: "Call mom for her birthday",
-        category: "Personal", 
+        category: "Personal",
         done: true,
-        createdAt: Date.now() - 172800000
+        createdAt: Date.now() - 172800000,
       },
       {
         id: makeId(),
         text: "Schedule dentist appointment",
         category: "Personal",
         done: false,
-        createdAt: Date.now() - 259200000
+        createdAt: Date.now() - 259200000,
       },
       {
         id: makeId(),
         text: "Complete Web Design project",
         category: "School",
         done: false,
-        createdAt: Date.now() - 345600000
+        createdAt: Date.now() - 345600000,
       },
       {
         id: makeId(),
         text: "Study for midterm exam",
         category: "School",
         done: false,
-        createdAt: Date.now() - 432000000
+        createdAt: Date.now() - 432000000,
       },
       {
         id: makeId(),
         text: "Submit homework assignment",
         category: "School",
         done: true,
-        createdAt: Date.now() - 518400000
+        createdAt: Date.now() - 518400000,
       },
       {
         id: makeId(),
         text: "Prepare quarterly report",
         category: "Work",
         done: false,
-        createdAt: Date.now() - 604800000
+        createdAt: Date.now() - 604800000,
       },
       {
         id: makeId(),
         text: "Team meeting at 2 PM",
         category: "Work",
         done: true,
-        createdAt: Date.now() - 691200000
+        createdAt: Date.now() - 691200000,
       },
       {
         id: makeId(),
         text: "Update project documentation",
         category: "Work",
         done: false,
-        createdAt: Date.now() - 777600000
-      }
+        createdAt: Date.now() - 777600000,
+      },
     ];
 
     const dummyJournalEntries = [
       {
         id: makeId(),
-        date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+        date: new Date(Date.now() - 86400000).toISOString().split("T")[0],
         text: "Had a productive day at work today. Finished the presentation for tomorrow's meeting and felt really confident about it. Also managed to squeeze in a quick workout during lunch break, which felt great.",
-        createdAt: Date.now() - 86400000
+        createdAt: Date.now() - 86400000,
       },
       {
         id: makeId(),
-        date: new Date(Date.now() - 172800000).toISOString().split('T')[0],
+        date: new Date(Date.now() - 172800000).toISOString().split("T")[0],
         text: "Struggled with the web design project today. The CSS grid layout isn't cooperating the way I want it to. Need to spend more time on it tomorrow. On the bright side, had a nice dinner with friends which helped me unwind.",
-        createdAt: Date.now() - 172800000
+        createdAt: Date.now() - 172800000,
       },
       {
         id: makeId(),
-        date: new Date(Date.now() - 259200000).toISOString().split('T')[0],
+        date: new Date(Date.now() - 259200000).toISOString().split("T")[0],
         text: "Weekend was relaxing but also productive. Caught up on some personal reading and started planning my garden for spring. Feeling motivated to tackle the upcoming week's challenges.",
-        createdAt: Date.now() - 259200000
-      }
+        createdAt: Date.now() - 259200000,
+      },
     ];
 
     tasks = dummyTasks;
     journalEntries = dummyJournalEntries;
-    
+
     store.set(TASKS_KEY, tasks);
     store.set(JOURNAL_KEY, journalEntries);
-    
+
     render();
   }
 }
@@ -283,9 +301,9 @@ loadDummyData();
 
 // Event handlers - add new task
 if (formEl) {
-  formEl.addEventListener("submit", event => {
+  formEl.addEventListener("submit", (event) => {
     event.preventDefault();
-    
+
     const taskText = (textEl?.value || "").trim();
     if (!taskText) return;
 
@@ -296,7 +314,7 @@ if (formEl) {
       done: false,
       createdAt: Date.now(),
     };
-    
+
     tasks.push(newTask);
     store.set(TASKS_KEY, tasks);
 
@@ -307,12 +325,12 @@ if (formEl) {
 
 // Add journal entry
 if (journalFormEl) {
-  journalFormEl.addEventListener("submit", event => {
+  journalFormEl.addEventListener("submit", (event) => {
     event.preventDefault();
-    
+
     const entryDate = document.getElementById("journalDate")?.value;
     const entryText = document.getElementById("journalText")?.value?.trim();
-    
+
     if (!entryDate || !entryText) return;
 
     const newEntry = {
@@ -321,12 +339,12 @@ if (journalFormEl) {
       text: entryText,
       createdAt: Date.now(),
     };
-    
+
     journalEntries.push(newEntry);
     store.set(JOURNAL_KEY, journalEntries);
 
     journalFormEl.reset();
-    
+
     const dateEl = document.getElementById("journalDate");
     if (dateEl) dateEl.value = new Date().toISOString().split("T")[0];
 
@@ -336,34 +354,34 @@ if (journalFormEl) {
 
 // Remove task
 if (listEl) {
-  listEl.addEventListener("click", event => {
+  listEl.addEventListener("click", (event) => {
     const removeButton = event.target.closest(".t-remove");
     if (!removeButton) return;
-    
+
     const taskListItem = removeButton.closest("li");
     if (!taskListItem) return;
-    
+
     const taskId = taskListItem.getAttribute("data-id");
-    
-    tasks = tasks.filter(task => task.id !== taskId);
+
+    tasks = tasks.filter((task) => task.id !== taskId);
     store.set(TASKS_KEY, tasks);
     render();
   });
-  
+
   // Toggle task completion
-  listEl.addEventListener("change", event => {
+  listEl.addEventListener("change", (event) => {
     if (!event.target.classList.contains("t-done")) return;
-    
+
     const taskListItem = event.target.closest("li");
     if (!taskListItem) return;
-    
+
     const taskId = taskListItem.getAttribute("data-id");
     const isCompleted = event.target.checked;
-    
-    tasks = tasks.map(task => 
+
+    tasks = tasks.map((task) =>
       task.id === taskId ? { ...task, done: isCompleted } : task
     );
-    
+
     store.set(TASKS_KEY, tasks);
     render();
   });
@@ -371,46 +389,51 @@ if (listEl) {
 
 // Theme toggle
 if (toggleEl) {
-  const isInitiallyDark = document.documentElement.classList.contains("theme-dark-a");
+  const isInitiallyDark =
+    document.documentElement.classList.contains("theme-dark-a");
   toggleEl.setAttribute("aria-pressed", isInitiallyDark ? "true" : "false");
 
   toggleEl.addEventListener("click", () => {
     const isNowDark = document.documentElement.classList.toggle("theme-dark-a");
-    
+
     store.set(THEME_KEY, isNowDark ? "theme-dark-a" : "");
     toggleEl.setAttribute("aria-pressed", isNowDark ? "true" : "false");
-    
+
     updateThemeColor();
   });
 }
 
 // Navigation highlighting
-document.querySelectorAll(".main-nav a").forEach(link => {
+document.querySelectorAll(".main-nav a").forEach((link) => {
   const href = link.getAttribute("href");
   const currentPage = location.pathname.split("/").pop() || "index.html";
   const isCurrentPage = href === currentPage;
-  
+
   link.classList.toggle("active", isCurrentPage);
   link.toggleAttribute("aria-current", isCurrentPage);
 });
 
 // Clear all data
-const clearDataBtn = document.getElementById('clearDataBtn');
+const clearDataBtn = document.getElementById("clearDataBtn");
 if (clearDataBtn) {
-  clearDataBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+  clearDataBtn.addEventListener("click", () => {
+    if (
+      confirm(
+        "Are you sure you want to clear all data? This action cannot be undone."
+      )
+    ) {
       localStorage.removeItem(TASKS_KEY);
       localStorage.removeItem(JOURNAL_KEY);
       localStorage.removeItem(THEME_KEY);
-      
+
       tasks = [];
       journalEntries = [];
-      theme = '';
-      
-      document.documentElement.classList.remove('theme-dark-a');
+      theme = "";
+
+      document.documentElement.classList.remove("theme-dark-a");
       render();
-      
-      alert('All data has been cleared.');
+
+      alert("All data has been cleared.");
     }
   });
 }
@@ -422,11 +445,15 @@ if (dateEl) {
 }
 
 // Debug helper
-window.BP = { 
-  get tasks() { return [...tasks]; },
-  get journalEntries() { return [...journalEntries]; },
+window.BP = {
+  get tasks() {
+    return [...tasks];
+  },
+  get journalEntries() {
+    return [...journalEntries];
+  },
   render,
-  store
+  store,
 };
 
 // Wisdom quotes
@@ -486,18 +513,18 @@ const QUOTES = [
   {
     text: "Order your soul. Reduce your wants. Live in harmony with nature.",
     author: "Epicurus",
-  }
+  },
 ];
 
 // Fisher-Yates shuffle
 function shuffleArray(array) {
   const shuffled = [...array];
-  
+
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  
+
   return shuffled;
 }
 
@@ -506,7 +533,9 @@ function getNextQuote() {
   let qpos = store.get("bp:qpos", 0);
 
   if (!quoteOrder || !Array.isArray(quoteOrder) || qpos >= quoteOrder.length) {
-    quoteOrder = shuffleArray(Array.from({ length: QUOTES.length }, (_, i) => i));
+    quoteOrder = shuffleArray(
+      Array.from({ length: QUOTES.length }, (_, i) => i)
+    );
     store.set("bp:quoteOrder", quoteOrder);
     qpos = 0;
   }
@@ -535,13 +564,13 @@ function injectQuoteComponent() {
 
   const footer = document.querySelector("footer");
   if (footer) {
-    footer.insertAdjacentHTML('beforebegin', quoteHTML);
+    footer.insertAdjacentHTML("beforebegin", quoteHTML);
   } else {
     const main = document.querySelector("main");
     if (main) {
-      main.insertAdjacentHTML('beforeend', quoteHTML);
+      main.insertAdjacentHTML("beforeend", quoteHTML);
     } else {
-      document.body.insertAdjacentHTML('beforeend', quoteHTML);
+      document.body.insertAdjacentHTML("beforeend", quoteHTML);
     }
   }
 }
